@@ -16,20 +16,40 @@ from bot_init import dp, bot, db
 test_data = None
 
 class RegStates(StatesGroup):
-    nationality = State()
+    general = State()
+    country = State()
+    region = State()
+    city = State()
     fullname = State()
-    phonenumber = State()
     address = State()
-    postcode = State()
-    #photo = State()
+    date_of_birth = State()
+    document_id = State()
+    phonenumber = State()
 
 # @dp.message_handler(commands='start')
 async def cm_start(message: types.Message, state: FSMContext):
     await message.answer(random.choice(config.welcome))
-    await message.answer('Привет!', reply_markup=nav.mainMenu())
-    if(message.from_user.id in ADMINS):
-        await bot.send_message(message.from_user.id,"<b>Admin Menu</b>", reply_markup=nav.adminMenu(), parse_mode="html")
-    await state.set_state(None)
+       
+    # If user exists
+    if(db.user_exists(message.from_user.id)):
+        # Send user to main menu
+        user_language = db.get_user_language(message.from_user.id)
+        await state.set_state(None)
+        await message.answer('Привет!', parse_mode="html", reply_markup=nav.mainMenu(user_language))
+    else:
+    # If user not exists
+        # Get referral id
+        start_command = message.text
+        referral_id = str(start_command[7:])
+        if(referral_id == ""):
+            referral_id = None
+        # Init user to DB
+        db.add_user_empty(message.from_user.id, message.from_user.username, referral_id ,"new")
+        # Send user to language panel
+        await message.answer('Привет. Выберите язык использования!\nHello. Choose your language!', parse_mode="html", reply_markup=nav.langMenu)
+    
+    # if(message.from_user.id in ADMINS):
+    #     await bot.send_message(message.from_user.id,"<b>Admin Menu</b>", reply_markup=nav.adminMenu(), parse_mode="html")
 
 #@dp.message_handler(state = '*', commands=['cancel'])
 #@dp.message_handler(Text(equals='cancel', ignore_case=True), state='*')
@@ -51,24 +71,21 @@ async def clear_chat(start_id: int, chat_id: int) -> None:
         except Exception:
             pass
 
-@dp.callback_query_handler()
+@dp.callback_query_handler(text_contains = "lang_", state=None)
+async def setLanguage(callback: types.CallbackQuery):
+    print("###DEBUG### setLanguage started")
+    lang = callback.data[5:]
+    #db.change_user_language(callback.from_user.id, lang)
+    await bot.delete_message(callback.from_user.id, callback.message.message_id)
+
+    await bot.send_message(callback.from_user.id, callback.from_user.username + nav.set_localization("Привет!", lang), reply_markup=nav.mainMenu())
+    #await RegStates.captcha.set()
+    print("###DEBUG### setLanguage finished")
+    return 0
+
+@dp.callback_query_handler(text_contains = "lang_", state=RegStates.general)
 #@dp.callback_query_handler(lambda x: x.data and x.data.startswith("reg "))
 async def reg_start(call: types.CallbackQuery, state: FSMContext):
-
-    # global test_data
-    # try:
-    #     file = open('users.txt', 'a+', encoding='utf-8')
-    #     test_data = [_.strip() for _ in file.readlines()]
-    #     file.close()
-    # except FileNotFoundError:
-    #     pass
-
-    # if call.message.chat.username:
-    #     if newdb.user_exists(call.message.from_user.id):
-    #         await call.message.answer(f'Извините, но вы уже давали свои данные {random.choice(config.lying_reaction)}', reply_markup=nav.mainMenu())
-    #         await clear_chat(call.message.message_id, call.message.chat.id)
-    #         await state.set_state(None)
-    #         return
     if call.message:
         if call.data == 'reg':
             newdb = Database()
@@ -78,8 +95,9 @@ async def reg_start(call: types.CallbackQuery, state: FSMContext):
                 await state.set_state(None)
                 return
             else:
+
                 await call.message.answer('Введите, пожалуйста, свою национальность (страну)')
-                await RegStates.nationality.set()
+                await RegStates.country.set()
                 await clear_chat(call.message.message_id, call.message.chat.id)
         if call.data == 'FAQ':
             await call.message.answer(config.FAQ_info, parse_mode=types.ParseMode.MARKDOWN_V2, reply_markup=nav.mainMenu())
@@ -220,8 +238,8 @@ def register_handlers_registration(dp : Dispatcher):
     dp.register_message_handler(cm_start, commands=['start'], state=None)
     dp.register_message_handler(cancel_handler, state = '*', commands=['cancel'])
     dp.register_message_handler(cancel_handler, Text(equals='cancel', ignore_case=True), state='*')
-    dp.register_message_handler(nationality, state=RegStates.nationality)
+    dp.register_message_handler(nationality, state=RegStates.country)
     dp.register_message_handler(fullname, state=RegStates.fullname)
     dp.register_message_handler(phonenumber, state=RegStates.phonenumber)
     dp.register_message_handler(address, state=RegStates.address)
-    dp.register_message_handler(postcode, state=RegStates.postcode)
+    dp.register_message_handler(postcode, state=RegStates.address)
