@@ -10,6 +10,7 @@ from aiogram import types, Dispatcher
 import logging
 import config
 #from config import ADMINS
+from localization.localization import set_localization
 from keyboards import keyboards as nav
 from database.database import Database
 from bot_init import dp, bot, db
@@ -48,13 +49,21 @@ async def cm_start(message: types.Message, state: FSMContext):
         ## Send user to language panel
         await message.answer('Привет. Выберите язык использования!\nHello. Choose your language!', parse_mode="html", reply_markup=nav.langMenu)
 
+# ## Create ref link
+# @dp.message_handler(commands=["ref"])
+# async def get_ref(message: types.Message):
+#     link = await get_start_link(str(message.from_user.id), encode=True)
+#     # result: 'https://t.me/MyBot?start='
+#     ## после знака = будет закодированный никнейм юзера, который создал реф ссылку, вместо него можно вставить и его id 
+#     await message.answer(f"Ваша реф. ссылка {link}")
+
 ## Create ref link
-@dp.message_handler(commands=["ref"])
-async def get_ref(message: types.Message):
-    link = await get_start_link(str(message.from_user.id), encode=True)
+async def get_ref(user_id):
+    link = await get_start_link(str(user_id), encode=True)
     # result: 'https://t.me/MyBot?start='
-    ## после знака = будет закодированный никнейм юзера, который создал реф ссылку, вместо него можно вставить и его id 
-    await message.answer(f"Ваша реф. ссылка {link}")
+    ## после знака = будет закодированный никнейм юзера, который создал реф ссылку, вместо него можно вставить и его id
+    print(link)
+    return str(link)
 
 #@dp.message_handler(state = '*', commands=['cancel'])
 #@dp.message_handler(Text(equals='cancel', ignore_case=True), state='*')
@@ -82,15 +91,32 @@ async def setLanguage(callback: types.CallbackQuery, state: FSMContext):
     lang = callback.data[5:]
     db.change_user_language(callback.from_user.id, lang)
     await bot.delete_message(callback.from_user.id, callback.message.message_id)
-
     await bot.send_message(callback.from_user.id, callback.from_user.username + nav.set_localization("Привет!", lang), reply_markup=nav.mainMenu(lang))
-    #RegStates.general.set()
     logging.debug("###DEBUG### setLanguage finished")
+
+@dp.callback_query_handler(text_contains = "managerstats", state=None)
+async def managerStats(callback: types.CallbackQuery, state: FSMContext):
+    logging.debug("###DEBUG### managerstats started")
+    user_language = db.get_user_language(callback.from_user.id)
+    await bot.delete_message(callback.from_user.id, callback.message.message_id)
+    await bot.send_message(callback.from_user.id, 
+                           nav.set_localization("Привет!", str(user_language)) + str(callback.from_user.username) 
+                            +"\nВаша статистика "
+                            +"\nРеферальная ссылка: "+ await get_ref(callback.from_user.id)
+                            +"\nПустых участников: "+str(db.get_manager_invites(callback.from_user.id, user_status="new"))
+                            +"\nЗаполненых участников: "+str(db.get_manager_invites(callback.from_user.id, user_status="filled")),
+                           reply_markup=nav.mainMenu(user_language),parse_mode="html")
+    ## If user manager
+    if(db.is_user_manager(callback.from_user.id)):
+        await state.set_state(None)
+        await bot.send_message(callback.from_user.id,'Менеджер меню!', parse_mode="html", reply_markup=nav.managerMenu(user_language))
+    await clear_chat(callback.message.message_id, callback.message.chat.id)
+    logging.debug("###DEBUG### managerstats finished")
 
 @dp.callback_query_handler()
 #@dp.callback_query_handler(lambda x: x.data and x.data.startswith("reg "))
 async def main_menu(call: types.CallbackQuery, state: FSMContext):
-    print(await state.get_state())
+    logging.debug(await state.get_state())
     if call.message:
         #user_language = db.get_user_language(call.message.from_user.id)
         if call.data == 'reg':
@@ -106,9 +132,9 @@ async def main_menu(call: types.CallbackQuery, state: FSMContext):
         if call.data == 'FAQ':
             await call.message.answer(config.FAQ_info, parse_mode=types.ParseMode.MARKDOWN_V2, reply_markup=nav.mainMenu())
             await clear_chat(call.message.message_id, call.message.chat.id)
-        elif call.data == 'coinlistinfo':
-            await call.message.answer('конлист', reply_markup=nav.mainMenu())
-            await clear_chat(call.message.message_id, call.message.chat.id)
+        # elif call.data == 'coinlistinfo':
+        #     await call.message.answer('конлист', reply_markup=nav.mainMenu())
+        #     await clear_chat(call.message.message_id, call.message.chat.id)
 
 async def input_country(message: types.Message, state: FSMContext):
     ## Check if country is allowed
@@ -188,6 +214,7 @@ async def input_phonenumber(message: types.Message, state: FSMContext):
     await state.update_data(phone_number=message.text)
 
     data = await state.get_data()
+    ## Update user data in table
     db.add_user_account(data['tg_id'],
                         data['tg_username'],
                         data['country'],
@@ -199,6 +226,13 @@ async def input_phonenumber(message: types.Message, state: FSMContext):
                         data['document_id'],
                         data['phone_number'])
     logging.debug("DB user data update in table!")
+
+    ## Notify manager about filled user
+    manager_id = db.get_user_referral(data['tg_id'])
+    if(manager_id != ""):
+        manager_language = db.get_user_language(manager_id)
+        await bot.send_message(manager_id, "@" + data['tg_username'] + set_localization(" заполнил свои данные и ждет вас для прохождения верификации!",manager_language))
+
     await state.finish()
     await message.answer('🎉')
     await clear_chat(message.message_id, message.chat.id)

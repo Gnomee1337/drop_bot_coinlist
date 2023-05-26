@@ -13,10 +13,10 @@ def mainMenu(lang='en'):
     mainMenu = InlineKeyboardMarkup(resize_keyboard = True)
     
     btnFAQ = InlineKeyboardButton(set_localization("FAQ", lang),callback_data='FAQ')
-    btnAbout = InlineKeyboardButton(set_localization("About", lang),callback_data='coinlistinfo')
+    #btnAbout = InlineKeyboardButton(set_localization("About", lang),callback_data='coinlistinfo')
     btnRegistration = InlineKeyboardButton(set_localization("Registration", lang), callback_data='reg')
     
-    mainMenu.add(btnFAQ, btnAbout, btnRegistration)
+    mainMenu.add(btnFAQ, btnRegistration)
 
     return mainMenu
 
