@@ -2,7 +2,8 @@ localization = {
     'ru':{
         "FAQ" : "инфо",
         "About" : "про",
-        "Registration" : "регистрация"
+        "Registration" : "регистрация",
+        "Привет!" : "Holla!"
     }
 }
 

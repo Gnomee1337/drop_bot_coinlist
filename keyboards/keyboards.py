@@ -5,7 +5,6 @@ from localization.localization import set_localization
 #Language
 langRU = InlineKeyboardButton(text='🇷🇺 Русский', callback_data='lang_ru')
 langEN = InlineKeyboardButton(text='🇺🇸 English', callback_data='lang_en')
-
 #LanguageMenu
 langMenu = InlineKeyboardMarkup(resize_keyboard = True)
 langMenu.add(langRU, langEN)
@@ -21,11 +20,11 @@ def mainMenu(lang='en'):
 
     return mainMenu
 
-def adminMenu(lang='ru'):
-    adminMenu = ReplyKeyboardMarkup(resize_keyboard = True)
+def managerMenu(lang='en'):
+    managerMenu = InlineKeyboardMarkup(resize_keyboard = True)
 
-    btnShowUsers = KeyboardButton("Показать Пользователей")
+    btnShowStats = InlineKeyboardButton(set_localization("My stats", lang),callback_data='managerstats')
 
-    adminMenu.add(btnShowUsers)
+    managerMenu.add(btnShowStats)
 
-    return adminMenu
+    return managerMenu
