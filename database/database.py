@@ -23,7 +23,7 @@ class Database:
             result = self.cursor.execute(sql, (user_id,)).fetchone()
             # result = self.cursor.fetchone()
             # print(result)
-            if result != None:
+            if result is not None:
                 return 1
             else:
                 return 0
@@ -33,7 +33,7 @@ class Database:
             sql = "SELECT `tg_id` FROM `drop_accs` WHERE `tg_id` = ? AND `user_status` != 'new'"
             result = self.cursor.execute(sql, (user_id,)).fetchone()
             # result = self.cursor.fetchone()
-            if result != None:
+            if result is not None:
                 return 1
             else:
                 return 0
@@ -43,7 +43,7 @@ class Database:
             sql = "SELECT `phone_number` FROM `drop_accs` WHERE `phone_number` = ?"
             result = self.cursor.execute(sql, (phonenumber,)).fetchone()
             # result = self.cursor.fetchone()
-            if result != None:
+            if result is not None:
                 return bool(len(result))
             else:
                 return 0
@@ -55,19 +55,19 @@ class Database:
                 sql, (tg_id, tg_username, referral_id, user_status)).fetchall()
             self.connection.commit()
             #result = self.cursor.fetchall()
-            if result != None:
+            if result is not None:
                 return bool(len(result))
             else:
                 return 0
 
-    def add_user_account(self, tg_id, tg_username, country, region, city, full_name, address, date_of_birth, document_id, phone_number, user_status="filled"):
+    def add_user_account(self, tg_id, tg_username, country, region, city, first_name, middle_name, surname, address, postcode, date_of_birth, document_id, phone_number, user_status="filled"):
         with self.connection:
-            sql = "UPDATE `drop_accs` SET `country` = ?, `region` = ?, `city` = ?, `full_name` = ?, `address` = ?, `date_of_birth` = ?,`document_id` = ?,`phone_number` = ?,`user_status` = ? WHERE `tg_id` = ?"
+            sql = "UPDATE `drop_accs` SET `country` = ?, `region` = ?, `city` = ?, `first_name` = ?, `middle_name` = ?, `surname` = ?, `address` = ?, `postcode`= ?, `date_of_birth` = ?, `document_id` = ?, `phone_number` = ?, `user_status` = ? WHERE `tg_id` = ?"
             result = self.cursor.execute(
-                sql, (country, region, city, full_name, address, date_of_birth, document_id, phone_number, user_status, tg_id)).fetchall()
+                sql, (country, region, city, first_name, middle_name, surname, address, postcode, date_of_birth, document_id, phone_number, user_status, tg_id)).fetchall()
             self.connection.commit()
             #result = self.cursor.fetchall()
-            if result != None:
+            if result is not None:
                 return bool(len(result))
             else:
                 return 0
@@ -77,17 +77,17 @@ class Database:
             sql = "SELECT `language` FROM `drop_accs` WHERE `tg_id` = ?"
             result = self.cursor.execute(sql, (user_id,)).fetchone()
             # result = self.cursor.fetchone()
-            if result != None:
-                return result
+            if result[0] is not None:
+                return result[0]
             else:
-                return 'en'
+                return 'ru'
 
     def get_user_referral(self, user_id):
         with self.connection:
             sql = "SELECT `referral_id` FROM `drop_accs` WHERE `tg_id` = ?"
             result = self.cursor.execute(sql, (user_id,)).fetchone()
             # result = self.cursor.fetchone()
-            if result[0] != None:
+            if result[0] is not None:
                 return result[0]
             else:
                 return None
@@ -104,7 +104,7 @@ class Database:
             result = self.cursor.execute(sql, (user_id,)).fetchone()
             #result = self.cursor.fetchone()
             #print(result)
-            if result[0] != None:
+            if result is not None:
                 return result[0]
             else:
                 return 0
@@ -114,8 +114,19 @@ class Database:
             sql = "SELECT COUNT(`referral_id`) FROM `drop_accs` WHERE `referral_id` = ? AND `user_status` = ?"
             result = self.cursor.execute(sql, (user_id, user_status,)).fetchone()
             # result = self.cursor.fetchone()
-            if result[0] != None:
+            if result[0] is not None:
                 return result[0]
+            else:
+                return None
+            
+    def get_top_managers(self):
+        with self.connection:
+            sql = "SELECT `tg_id_top_manager` FROM `top_manager`"
+            result = self.cursor.execute(sql, ()).fetchall()
+            # result = self.cursor.fetchone()
+            #print(result)
+            if result is not None:
+                return result
             else:
                 return None
 

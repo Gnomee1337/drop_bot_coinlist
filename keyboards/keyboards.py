@@ -12,9 +12,9 @@ langMenu.add(langRU, langEN)
 def mainMenu(lang='en'):
     mainMenu = InlineKeyboardMarkup(resize_keyboard = True)
     
-    btnFAQ = InlineKeyboardButton(set_localization("FAQ", lang),callback_data='FAQ')
+    btnFAQ = InlineKeyboardButton(set_localization("Информация", lang),callback_data='FAQ')
     #btnAbout = InlineKeyboardButton(set_localization("About", lang),callback_data='coinlistinfo')
-    btnRegistration = InlineKeyboardButton(set_localization("Registration", lang), callback_data='reg')
+    btnRegistration = InlineKeyboardButton(set_localization("Регистрация", lang), callback_data='reg')
     
     mainMenu.add(btnFAQ, btnRegistration)
 
@@ -23,7 +23,7 @@ def mainMenu(lang='en'):
 def managerMenu(lang='en'):
     managerMenu = InlineKeyboardMarkup(resize_keyboard = True)
 
-    btnShowStats = InlineKeyboardButton(set_localization("My stats", lang),callback_data='managerstats')
+    btnShowStats = InlineKeyboardButton(set_localization("Моя статистика", lang),callback_data='managerstats')
 
     managerMenu.add(btnShowStats)
 

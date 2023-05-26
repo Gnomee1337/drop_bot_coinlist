@@ -1,6 +1,4 @@
 --
---
---
 PRAGMA foreign_keys = off;
 BEGIN TRANSACTION;
 
@@ -11,16 +9,20 @@ CREATE TABLE IF NOT EXISTS drop_accs (
                           NOT NULL,
     tg_username   TEXT    NOT NULL,
     full_name     TEXT,
+    first_name    TEXT,
+    middle_name   TEXT,
+    surname       TEXT,
     country       TEXT,
     region        TEXT,
     city          TEXT,
     address       TEXT,
+    postcode      TEXT,
     date_of_birth TEXT,
     document_id   TEXT,
     phone_number  TEXT,
     referral_id   INTEGER,
     language      TEXT    NOT NULL
-                          DEFAULT en,
+                          DEFAULT ru,
     verified      INTEGER NOT NULL
                           DEFAULT (0),
     user_status   TEXT    NOT NULL
@@ -36,6 +38,15 @@ CREATE TABLE IF NOT EXISTS drop_manager (
     dm_tg_username  TEXT    NOT NULL,
     invited_users   INTEGER DEFAULT (0) 
                             NOT NULL
+);
+
+
+-- Table: top_manager
+CREATE TABLE IF NOT EXISTS top_manager (
+    id_top_manager          INTEGER PRIMARY KEY,
+    tg_id_top_manager       INTEGER UNIQUE
+                                    NOT NULL,
+    tg_username_top_manager TEXT    NOT NULL
 );
 
 
