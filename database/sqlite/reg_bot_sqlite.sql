@@ -1,4 +1,6 @@
 --
+--
+--
 PRAGMA foreign_keys = off;
 BEGIN TRANSACTION;
 
@@ -34,6 +36,15 @@ CREATE TABLE IF NOT EXISTS drop_manager (
     dm_tg_username  TEXT    NOT NULL,
     invited_users   INTEGER DEFAULT (0) 
                             NOT NULL
+);
+
+
+-- Table: webpanel_accounts
+CREATE TABLE IF NOT EXISTS webpanel_accounts (
+    id_wp_accs       INTEGER PRIMARY KEY AUTOINCREMENT
+                             NOT NULL,
+    username_wp_accs TEXT    NOT NULL,
+    password_wp_accs TEXT    NOT NULL
 );
 
 
