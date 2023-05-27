@@ -41,11 +41,11 @@ async def cm_start(message: types.Message, state: FSMContext):
         ## Send user to main menu
         user_language = db.get_user_language(message.from_user.id)
         await state.set_state(None)
-        await message.answer(set_localization('Hello ',user_language), parse_mode="html", reply_markup=nav.mainMenu(user_language))
+        await message.answer(set_localization('Привет ',user_language), parse_mode="html", reply_markup=nav.mainMenu(user_language))
         ## If user manager
         if(db.is_user_manager(message.from_user.id)):
             await state.set_state(None)
-            await message.answer(set_localization('Hello ',user_language)+message.from_user.username +"!\nManager menu!", parse_mode="html", reply_markup=nav.managerMenu(user_language))
+            await message.answer(set_localization('Привет ',user_language)+message.from_user.username +"!\nМеню менеджера!", parse_mode="html", reply_markup=nav.managerMenu(user_language))
     else:
     ## If user not exists
         ## Get referral id
@@ -137,7 +137,11 @@ async def main_menu(call: types.CallbackQuery, state: FSMContext):
                 await clear_chat(call.message.message_id, call.message.chat.id)
         if call.data == 'FAQ':
             await call.message.answer(config.FAQ_info, parse_mode=types.ParseMode.MARKDOWN_V2, reply_markup=nav.mainMenu(user_language))
-            await clear_chat(call.message.message_id, call.message.chat.id)
+            ## If user manager
+            if(db.is_user_manager(call.from_user.id)):
+                await state.set_state(None)
+                await call.message.answer(set_localization('Привет ',user_language)+call.message.chat.username +"!\nМеню менеджера!", parse_mode="html", reply_markup=nav.managerMenu(user_language))
+                await clear_chat(call.message.message_id, call.message.chat.id)
         # elif call.data == 'coinlistinfo':
         #     await call.message.answer('конлист', reply_markup=nav.mainMenu())
         #     await clear_chat(call.message.message_id, call.message.chat.id)
@@ -264,8 +268,8 @@ async def input_postcode(message: types.Message, state: FSMContext):
     user_language = db.get_user_language(message.from_user.id)
     await state.update_data(postcode=str(message.text))
     await RegStates.date_of_birth.set()
-    await message.answer(set_localization("Укажите свою Дату Рождения",user_language))
-
+    await message.answer(set_localization("Укажите свою Дату Рождения в формате День-Месяц-Год",user_language))
+ 
 async def input_date_of_birth(message: types.Message, state: FSMContext):
     user_language = db.get_user_language(message.from_user.id)
     await state.update_data(date_of_birth=str(message.text))

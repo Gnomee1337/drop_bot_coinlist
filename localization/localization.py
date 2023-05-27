@@ -22,7 +22,7 @@ localization = {
         "Ваша Фамилия содержит некорректные символы, попробуйте еще раз ":"Your Surname contains invalid characters, try again ",
         "Введите ваш Адрес проживания":"Enter your Address of residence",
         "Укажите ваш Почтовый Индекс (Postcode)":"Enter your Postcode",
-        "Укажите свою Дату Рождения" : "Enter your Date of Birth",
+        "Укажите свою Дату Рождения в формате День-Месяц-Год" : "Enter your Date of Birth in Day-Month-Year format",
         "Укажите номер вашего Паспорта или Водительской Лицензии" : "Provide your Passport ID or Driver's license Number",
         "Укажите номер вашего Мобильного Телефона" : "Enter your Cell Phone Number",
         "Извините, но вы уже указывали данный номер телефона " : "Sorry, but you have already sumbitted this phone number",

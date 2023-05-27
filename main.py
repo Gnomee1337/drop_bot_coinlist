@@ -3,8 +3,8 @@ from aiogram import executor
 from bot_init import dp, bot, db
 
 
-logging.basicConfig(level=logging.INFO)
-#logging.basicConfig(level=logging.DEBUG)
+#logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 
 async def on_startup(_):
     print("BOT Started!")
