@@ -97,7 +97,7 @@ async def setLanguage(callback: types.CallbackQuery, state: FSMContext):
     lang = callback.data[5:]
     db.change_user_language(callback.from_user.id, lang)
     await bot.delete_message(callback.from_user.id, callback.message.message_id)
-    await bot.send_message(callback.from_user.id, callback.from_user.username + nav.set_localization("Hello ", lang), reply_markup=nav.mainMenu(lang))
+    await bot.send_message(callback.from_user.id, callback.from_user.username + " " +nav.set_localization("Привет!", lang), reply_markup=nav.mainMenu(lang))
     logging.debug("###DEBUG### setLanguage finished")
 
 @dp.callback_query_handler(text_contains = "managerstats", state=None)
@@ -115,7 +115,7 @@ async def managerStats(callback: types.CallbackQuery, state: FSMContext):
     ## If user manager
     if(db.is_user_manager(callback.from_user.id)):
         await state.set_state(None)
-        await bot.send_message(callback.from_user.id,set_localization("Manager Menu",user_language), parse_mode="html", reply_markup=nav.managerMenu(user_language))
+        await bot.send_message(callback.from_user.id,set_localization("Менеджер Меню",user_language), parse_mode="html", reply_markup=nav.managerMenu(user_language))
     await clear_chat(callback.message.message_id, callback.message.chat.id)
     logging.debug("###DEBUG### managerstats finished")
 

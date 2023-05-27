@@ -1,6 +1,6 @@
 localization = {
     'en':{
-        "Привет!" : "Hello ",
+        "Привет!" : "Hello! ",
         "!\nМеню менеджера!" : "!\nManager menu!",
         "Менеджер Меню" : "Manager Menu" ,
         "\nВаша статистика" : "\nYour stats" ,
