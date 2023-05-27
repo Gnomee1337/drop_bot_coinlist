@@ -1,4 +1,8 @@
 --
+-- File generated with SQLiteStudio v3.4.3 on Sat May 27 12:30:55 2023
+--
+-- Text encoding used: System
+--
 PRAGMA foreign_keys = off;
 BEGIN TRANSACTION;
 
@@ -8,7 +12,6 @@ CREATE TABLE IF NOT EXISTS drop_accs (
     tg_id         INTEGER UNIQUE
                           NOT NULL,
     tg_username   TEXT    NOT NULL,
-    full_name     TEXT,
     first_name    TEXT,
     middle_name   TEXT,
     surname       TEXT,
@@ -26,7 +29,9 @@ CREATE TABLE IF NOT EXISTS drop_accs (
     verified      INTEGER NOT NULL
                           DEFAULT (0),
     user_status   TEXT    NOT NULL
-                          DEFAULT new
+                          DEFAULT new,
+    approve_date  TEXT,
+    payment_date  TEXT
 );
 
 

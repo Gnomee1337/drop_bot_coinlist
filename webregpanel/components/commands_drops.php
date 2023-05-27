@@ -57,7 +57,7 @@
                 <!-- Drop options -->
                 <!-- Create drop -->
                 <p>
-                    <input id="add_drop_tgid" type="text" class="form-control    " placeholder="Укажите Telegram ID"
+                    <input id="add_drop_tgid" type="number" class="form-control    " placeholder="Укажите Telegram ID"
                         name="add_drop_tgid" style="display: none">
                     <input id="add_drop_username" type="text" class="form-control    "
                         placeholder="Укажите Telegram Username" name="add_drop_username" style="display: none">
@@ -73,7 +73,7 @@
                         name="add_drop_region" style="display: none">
                     <input id="add_drop_city" type="text" class="form-control    " placeholder="Укажите город"
                         name="add_drop_city" style="display: none">
-                    <input id="add_drop_address" type="text" class="form-control    " placeholder="Укажите адрес"
+                    <input id="add_drop_address" type="text" class="form-control" placeholder="Укажите адрес"
                         name="add_drop_address" style="display: none">
                     <input id="add_drop_postcode" type="text" class="form-control    "
                         placeholder="Укажите почтовый индекс" name="add_drop_postcode" style="display: none">
@@ -101,10 +101,14 @@
                         <option value="ru">Русский</option>
                         <option value="en">Английский</option>
                     </select>
+                    <input id="add_drop_approvedate" type="text" class="form-control" onfocus="(this.type='date')"
+                        placeholder="Укажите Дату апрува CoinList" name="add_drop_approvedate" style="display: none">
+                    <input id="add_drop_paymentdate" type="text" class="form-control" onfocus="(this.type='date')"
+                        placeholder="Укажите Дату оплаты CoinList" name="add_drop_paymentdate" style="display: none">
                 </p>
                 <!-- Edit drop -->
                 <p>
-                    <input id="edit_drop_tgid" type="text" class="form-control    " placeholder="Укажите Telegram ID"
+                    <input id="edit_drop_tgid" type="number" class="form-control    " placeholder="Укажите Telegram ID"
                         name="edit_drop_tgid" style="display: none">
                     <input id="edit_drop_username" type="text" class="form-control "
                         placeholder="Укажите Telegram Username" name="edit_drop_username" style="display: none">
@@ -148,6 +152,10 @@
                         <option value="ru">Русский</option>
                         <option value="en">Английский</option>
                     </select>
+                    <input id="edit_drop_approvedate" type="text" class="form-control" onfocus="(this.type='date')"
+                        placeholder="Укажите Дату апрува CoinList" name="edit_drop_approvedate" style="display: none">
+                    <input id="edit_drop_paymentdate" type="text" class="form-control" onfocus="(this.type='date')" 
+                        placeholder="Укажите Дату оплаты CoinList" name="edit_drop_paymentdate" style="display: none">
                 </p>
 
                 <!-- User options check -->
@@ -174,8 +182,8 @@
 
                         //Edit user
                         adds17 = doc.getElementById('edit_drop_tgid'),
-                        adds18 = doc.getElementById('edit_drop_username');
-                    adds19 = doc.getElementById('edit_drop_firstname'),
+                        adds18 = doc.getElementById('edit_drop_username'),
+                        adds19 = doc.getElementById('edit_drop_firstname'),
                         adds20 = doc.getElementById('edit_drop_middlename'),
                         adds21 = doc.getElementById('edit_drop_surname'),
                         adds22 = doc.getElementById('edit_drop_country'),
@@ -188,7 +196,15 @@
                         adds29 = doc.getElementById('edit_drop_phonenumber'),
                         adds30 = doc.getElementById('edit_drop_referral'),
                         adds31 = doc.getElementById('edit_drop_userstatus'),
-                        adds32 = doc.getElementById('edit_drop_language');
+                        adds32 = doc.getElementById('edit_drop_language'),
+                        
+                        //Add date
+                        adds33 = doc.getElementById('add_drop_approvedate'),
+                        adds34 = doc.getElementById('add_drop_paymentdate'),
+
+                        //Edit date
+                        adds35 = doc.getElementById('edit_drop_approvedate'),
+                        adds36 = doc.getElementById('edit_drop_paymentdate');
 
                     sel.addEventListener('change', function () {
                         //Add
@@ -208,7 +224,9 @@
                         adds14.style.display = this.value == "cmd_drop_add" ? 'block' : 'none';
                         adds15.style.display = this.value == "cmd_drop_add" ? 'block' : 'none';
                         adds16.style.display = this.value == "cmd_drop_add" ? 'block' : 'none';
-
+                        adds33.style.display = this.value == "cmd_drop_add" ? 'block' : 'none';
+                        adds34.style.display = this.value == "cmd_drop_add" ? 'block' : 'none';
+                        
 
                         //Edit
                         adds17.style.display = this.value == "cmd_drop_edit" ? 'block' : 'none';
@@ -227,6 +245,8 @@
                         adds30.style.display = this.value == "cmd_drop_edit" ? 'block' : 'none';
                         adds31.style.display = this.value == "cmd_drop_edit" ? 'block' : 'none';
                         adds32.style.display = this.value == "cmd_drop_edit" ? 'block' : 'none';
+                        adds35.style.display = this.value == "cmd_drop_edit" ? 'block' : 'none';
+                        adds36.style.display = this.value == "cmd_drop_edit" ? 'block' : 'none';
                     },
                         false);
                 </script>

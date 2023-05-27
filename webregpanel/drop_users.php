@@ -54,6 +54,8 @@ if (!isset($_SESSION['loggedin'])) {
                                                 <th>TG Nickname</th>
                                                 <th>От кого</th>
                                                 <th>Статус</th>
+                                                <th>Дата апрува</th>
+                                                <th>Дата оплаты</th>
                                                 <th>Язык</th>
                                                 <th>ID</th>
                                             </tr>
@@ -61,7 +63,7 @@ if (!isset($_SESSION['loggedin'])) {
                                         <tbody>
                                             <?php
                                             include('inc/config.php');
-                                            $statement = $db->prepare("SELECT `first_name`,`middle_name`,`surname`,`country`,`region`,`city`,`address`,`postcode`,`date_of_birth`,`document_id`,`phone_number`,`tg_username`,`referral_id`,`user_status`,`language`,`id_drop_accs` FROM drop_accs ORDER BY `id_drop_accs`");
+                                            $statement = $db->prepare("SELECT `first_name`,`middle_name`,`surname`,`country`,`region`,`city`,`address`,`postcode`,`date_of_birth`,`document_id`,`phone_number`,`tg_username`,`referral_id`,`user_status`,`approve_date`,`payment_date`,`language`,`id_drop_accs` FROM drop_accs ORDER BY `id_drop_accs`");
                                             $drop_accs = $statement->execute();
 
                                             $statement = $db->prepare("SELECT `drop_manager_id`,`dm_tg_id`,`dm_tg_username` FROM drop_manager");
@@ -108,6 +110,8 @@ if (!isset($_SESSION['loggedin'])) {
                                                     "</td><td class='txt'>", $user_status,
                                                     "</td><td class='txt'>", $users_verify_row[14],
                                                     "</td><td class='txt'>", $users_verify_row[15],
+                                                    "</td><td class='txt'>", $users_verify_row[16],
+                                                    "</td><td class='txt'>", $users_verify_row[17],
                                                     // "</td><td>","<input type=\"checkbox\" style=\"text-align:center;\" ng-model=\"x.dedbuffer\">",
                                                     "</td></tr>";
                                             }

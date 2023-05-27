@@ -49,9 +49,11 @@ if (!isset($_SESSION['loggedin'])) {
             $drop_referral = preg_replace("~[\\/:*?'<>|]~", ' ', $_POST['add_drop_referral']);
             $drop_language = preg_replace("~[\\/:*?'<>|]~", ' ', $_POST['add_drop_language']);
             $drop_userstatus = preg_replace("~[\\/:*?'<>|]~", ' ', $_POST['add_drop_userstatus']);
-
+            $drop_approvedate = preg_replace("~[\\/:*?'<>|]~", ' ', $_POST['add_drop_approvedate']);
+            $drop_paymentdate = preg_replace("~[\\/:*?'<>|]~", ' ', $_POST['add_drop_paymentdate']);
+            
             // Add drop to table
-            $statement = $db->prepare("INSERT INTO `drop_accs` (`tg_id`,`tg_username`,`first_name`,`middle_name`,`surname`,`country`,`region`,`city`,`address`,`postcode`,`date_of_birth`,`document_id`,`phone_number`,`referral_id`,`language`,`user_status`) VALUES ('$drop_tgid', '$drop_username', '$drop_firstname','$drop_middlename','$drop_surname','$drop_country','$drop_region','$drop_city','$drop_address','$drop_postcode','$drop_dateofbirth','$drop_documentid','$drop_phonenumber','$drop_referral','$drop_language','$drop_userstatus')");
+            $statement = $db->prepare("INSERT INTO `drop_accs` (`tg_id`,`tg_username`,`first_name`,`middle_name`,`surname`,`country`,`region`,`city`,`address`,`postcode`,`date_of_birth`,`document_id`,`phone_number`,`referral_id`,`language`,`user_status`,`approve_date`,`payment_date`) VALUES ('$drop_tgid', '$drop_username', '$drop_firstname','$drop_middlename','$drop_surname','$drop_country','$drop_region','$drop_city','$drop_address','$drop_postcode','$drop_dateofbirth','$drop_documentid','$drop_phonenumber','$drop_referral','$drop_language','$drop_userstatus','$drop_approvedate','$drop_paymentdate')");
             $create_user = $statement->execute();
 
             header('Location: ' . $url . 'drop_users.php');
@@ -75,6 +77,9 @@ if (!isset($_SESSION['loggedin'])) {
             $drop_referral = preg_replace("~[\\/:*?'<>|]~", ' ', $_POST['edit_drop_referral']);
             $drop_language = preg_replace("~[\\/:*?'<>|]~", ' ', $_POST['edit_drop_language']);
             $drop_userstatus = preg_replace("~[\\/:*?'<>|]~", ' ', $_POST['edit_drop_userstatus']);
+            $drop_approvedate = preg_replace("~[\\/:*?'<>|]~", ' ', $_POST['edit_drop_approvedate']);
+            $drop_paymentdate = preg_replace("~[\\/:*?'<>|]~", ' ', $_POST['edit_drop_paymentdate']);
+
             $statement = $db->prepare("UPDATE `drop_accs` SET `tg_id` = CASE WHEN COALESCE('$drop_tgid','') = '' THEN `tg_id` ELSE '$drop_tgid' END,
                                                             `tg_username` = CASE WHEN COALESCE('$drop_username','') = '' THEN `tg_username` ELSE '$drop_username' END, 
                                                             `first_name` = CASE WHEN COALESCE('$drop_firstname','') = '' THEN `first_name` ELSE '$drop_firstname' END, 
@@ -90,7 +95,9 @@ if (!isset($_SESSION['loggedin'])) {
                                                             `phone_number` = CASE WHEN COALESCE('$drop_phonenumber','') = '' THEN `phone_number` ELSE '$drop_phonenumber' END,
                                                             `referral_id` = CASE WHEN COALESCE('$drop_referral','') = '' THEN `referral_id` ELSE '$drop_referral' END,
                                                             `language` = CASE WHEN COALESCE('$drop_language','') = '' THEN `language` ELSE '$drop_language' END,
-                                                            `user_status` = CASE WHEN COALESCE('$drop_userstatus','') = '' THEN `user_status` ELSE '$drop_userstatus' END
+                                                            `user_status` = CASE WHEN COALESCE('$drop_userstatus','') = '' THEN `user_status` ELSE '$drop_userstatus' END,
+                                                            `approve_date` = CASE WHEN COALESCE('$drop_approvedate','') = '' THEN `approve_date` ELSE '$drop_approvedate' END,
+                                                            `payment_date` = CASE WHEN COALESCE('$drop_paymentdate','') = '' THEN `payment_date` ELSE '$drop_paymentdate' END
                                                           WHERE `id_drop_accs` = $target");
             $edit_drop = $statement->execute();
             header('Location: ' . $url . 'drop_users.php');
