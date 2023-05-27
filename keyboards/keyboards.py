@@ -9,7 +9,7 @@ langEN = InlineKeyboardButton(text='🇺🇸 English', callback_data='lang_en')
 langMenu = InlineKeyboardMarkup(resize_keyboard = True)
 langMenu.add(langRU, langEN)
 
-def mainMenu(lang='en'):
+def mainMenu(lang='ru'):
     mainMenu = InlineKeyboardMarkup(resize_keyboard = True)
     
     btnFAQ = InlineKeyboardButton(set_localization("Информация", lang),callback_data='FAQ')
@@ -20,7 +20,7 @@ def mainMenu(lang='en'):
 
     return mainMenu
 
-def managerMenu(lang='en'):
+def managerMenu(lang='ru'):
     managerMenu = InlineKeyboardMarkup(resize_keyboard = True)
 
     btnShowStats = InlineKeyboardButton(set_localization("Моя статистика", lang),callback_data='managerstats')

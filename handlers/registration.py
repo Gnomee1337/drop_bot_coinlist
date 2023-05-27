@@ -80,14 +80,16 @@ async def cancel_handler(message: types.Message, state: FSMContext):
     # Cancel state and inform user about it
     await state.finish()
     # And remove keyboard (just in case)
-    await message.reply('Отмена.\nCancelled.', reply_markup=types.ReplyKeyboardRemove())
+    #await message.reply('Отмена.\nCancelled.', reply_markup=types.ReplyKeyboardRemove())
+    await message.reply('Отмена.\nCancelled.', reply_markup=nav.mainMenu())
 
 async def clear_chat(start_id: int, chat_id: int) -> None:
-    for _ in range(start_id, start_id - 20, -1):
-        try:
-            await bot.delete_message(chat_id, _)
-        except Exception:
-            pass
+    return 0
+    # for _ in range(start_id, start_id - 20, -1):
+    #     try:
+    #         await bot.delete_message(chat_id, _)
+    #     except Exception:
+    #         pass
 
 @dp.callback_query_handler(text_contains = "lang_", state=None)
 async def setLanguage(callback: types.CallbackQuery, state: FSMContext):
@@ -125,7 +127,7 @@ async def main_menu(call: types.CallbackQuery, state: FSMContext):
         user_language = db.get_user_language(call.from_user.id)
         if call.data == 'reg':
             if db.user_registered(call.message.chat.id):
-                await call.message.answer(set_localization("Вы уже давали свои данные!",user_language)+random.choice(config.lying_reaction), reply_markup=nav.mainMenu())
+                await call.message.answer(set_localization("Вы уже давали свои данные!",user_language)+random.choice(config.lying_reaction), reply_markup=nav.mainMenu(user_language))
                 await clear_chat(call.message.message_id, call.message.chat.id)
                 await state.set_state(None)
                 return
@@ -134,7 +136,7 @@ async def main_menu(call: types.CallbackQuery, state: FSMContext):
                 await RegStates.country.set()
                 await clear_chat(call.message.message_id, call.message.chat.id)
         if call.data == 'FAQ':
-            await call.message.answer(config.FAQ_info, parse_mode=types.ParseMode.MARKDOWN_V2, reply_markup=nav.mainMenu())
+            await call.message.answer(config.FAQ_info, parse_mode=types.ParseMode.MARKDOWN_V2, reply_markup=nav.mainMenu(user_language))
             await clear_chat(call.message.message_id, call.message.chat.id)
         # elif call.data == 'coinlistinfo':
         #     await call.message.answer('конлист', reply_markup=nav.mainMenu())
@@ -145,7 +147,7 @@ async def input_country(message: types.Message, state: FSMContext):
     ## Check if country is allowed
     ## Country not allowed
     if message.text.lower() in config.forbidden_countries:
-        await message.answer(set_localization("Извините, но регистрация недоступна для граждан вашей страны", user_language) +random.choice(config.bad_reaction), reply_markup=nav.mainMenu())
+        await message.answer(set_localization("Извините, но регистрация недоступна для граждан вашей страны", user_language) +random.choice(config.bad_reaction), reply_markup=nav.mainMenu(user_language))
         await state.finish()
         return
     ## Country allowed
@@ -172,7 +174,7 @@ async def input_country(message: types.Message, state: FSMContext):
 async def input_region(message: types.Message, state: FSMContext):
         user_language = db.get_user_language(message.from_user.id)
         if message.text.lower() in config.forbidden_regions:
-            await message.answer(set_localization("Извините, но регистрация недоступна для граждан вашего региона", user_language) +random.choice(config.bad_reaction), reply_markup=nav.mainMenu())
+            await message.answer(set_localization("Извините, но регистрация недоступна для граждан вашего региона", user_language) +random.choice(config.bad_reaction), reply_markup=nav.mainMenu(user_language))
             await state.finish()
             return
         else:
@@ -279,7 +281,7 @@ async def input_document_id(message: types.Message, state: FSMContext):
 async def input_phonenumber(message: types.Message, state: FSMContext):
     user_language = db.get_user_language(message.from_user.id)
     if db.phone_exists(message.text):
-        await message.answer(set_localization("Извините, но вы уже указывали данный номер телефона ",user_language)+random.choice(config.lying_reaction), reply_markup=nav.mainMenu())
+        await message.answer(set_localization("Извините, но вы уже указывали данный номер телефона ",user_language)+random.choice(config.lying_reaction), reply_markup=nav.mainMenu(user_language))
         await state.finish()
         await clear_chat(message.message_id, message.chat.id)
         return
@@ -313,20 +315,33 @@ async def input_phonenumber(message: types.Message, state: FSMContext):
     drop_manager_id = db.get_user_referral(data['tg_id'])
     if(drop_manager_id != ""):
         manager_language = db.get_user_language(drop_manager_id)
-        await bot.send_message(drop_manager_id, "@" + data['tg_username'] + set_localization(" заполнил свои данные и ждет прохождения верификации!",manager_language))
+        await bot.send_message(drop_manager_id, "@" + data['tg_username'] + set_localization(" заполнил свои данные и ждет прохождения верификации!", manager_language))
     ## Notify top manager for new filled user
     top_managers = db.get_top_managers()
     try:
         for manager in top_managers[0]:
             manager_language = db.get_user_language(manager)
-            await bot.send_message(manager, "@" + data['tg_username'] + set_localization(" заполнил свои данные и ждет прохождения верификации!",manager_language)+'\n'+str(data))
+            await bot.send_message(manager, 
+                                   "@" + data['tg_username'] + "<b>"+set_localization(" заполнил свои данные и ждет прохождения верификации!", manager_language) + "</b>" +
+                                   "\nСтрана: " + str(data['country']) +
+                                   "\nРегион: " + str(data['region']) +
+                                   "\nГород: " + str(data['city']) +
+                                   "\nИмя: " + str(data['first_name']) +
+                                   "\nОтчество: " + str(data['middle_name']) +
+                                   "\nФамилия: " + str(data['surname']) +
+                                   "\nАдрес: " + str(data['address']) +
+                                   "\nПочтовый индекс: " + str(data['postcode']) +
+                                   "\nДата рождения: " + str(data['date_of_birth']) +
+                                   "\nДокумент ID: " + str(data['document_id']) +
+                                   "\nТелефон: " + str(data['phone_number'])
+                                   , parse_mode="html")
     except:
         pass
     await state.finish()
     await message.answer('🎉')
     await clear_chat(message.message_id, message.chat.id)
     await message.answer(set_localization("Поздравляю, информация сохранена!",user_language))
-    await message.answer(set_localization("Скоро с вами свяжется менеджер для прохождения верификации и выплаты 💰",user_language), reply_markup=nav.mainMenu())
+    await message.answer(set_localization("Скоро с вами свяжется менеджер для прохождения верификации и выплаты 💰",user_language), reply_markup=nav.mainMenu(user_language))
 
 def register_handlers_registration(dp : Dispatcher):
     dp.register_message_handler(cm_start, commands=['start'], state=None)
