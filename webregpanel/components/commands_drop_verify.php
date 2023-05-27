@@ -18,7 +18,7 @@
                         <tr>
                             <td>
                                 <!-- Commands row -->
-                                <select class="form-control  " id="select1" name="cmd">
+                                <select class="form-control" id="select1" name="cmd">
                                     <option value="nocommand" selected>Выберите Команду</option>
                                     <optgroup label="Верификация">
                                         <option value="cmd_verify_drop">Верифицировать пользователя</option>
@@ -54,14 +54,16 @@
                 </table>
                 <!-- Drop options -->
                 <p>
-                    <select id="verify_status_input" class="form-control form-control-sm  "
+                    <select id="verify_status_input" class="form-control "
                         name="verify_status_input" style="display: none">
                         <option value="0" disabled selected>Укажите статус пользователя</option>
-                        <option value="approved" class="form-control form-control-sm  text-primary">Одобрен
+                        <option value="approved" class="form-control text-success font-weight-bold">Одобрен
                         </option>
-                        <option value="photo" class="form-control form-control-sm  text-primary">Нужно photo
+                        <option value="photo" class="form-control text-warning font-weight-bold">Нужно фото
                         </option>
-                        <option value="decline" class="form-control form-control-sm  text-danger">Отклонить
+                        <option value="manual" class="form-control text-info font-weight-bold">Ручник
+                        </option>
+                        <option value="fail" class="form-control text-danger font-weight-bold">Отклонить
                         </option>
                     </select>
                 </p>

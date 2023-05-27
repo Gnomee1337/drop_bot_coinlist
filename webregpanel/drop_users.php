@@ -30,20 +30,22 @@ if (!isset($_SESSION['loggedin'])) {
                             Пользователи
                         </div>
                         <div class="card-body ">
-                            <div class="container text-center bg-sondary ">
-                                <div class="table-center pt-4 pb-4 ">
-                                    <table class="table table-bordered " id="dataTable" width="100%"
-                                        cellspacing="0">
+                            <div class="container text-center bg-sondary  ">
+                                <div class="table-responsive pt-4 pb-4 ">
+                                    <table class="table table-bordered table-hover " id="dataTable" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
-                                                <th>ФИО</th>
+                                                <th>Имя</th>
+                                                <th>Отчество</th>
+                                                <th>Фамилия</th>
                                                 <th>Страна</th>
                                                 <th>Область</th>
                                                 <th>Город</th>
                                                 <th>Адрес</th>
-                                                <th>Дата рождения</th>
+                                                <th>Postcode</th>
+                                                <th>Дата</th>
                                                 <th>Документы</th>
-                                                <th>Номер телефона</th>
+                                                <th>Телефон</th>
                                                 <th>TG Nickname</th>
                                                 <th>От кого</th>
                                                 <th>Статус</th>
@@ -54,7 +56,7 @@ if (!isset($_SESSION['loggedin'])) {
                                         <tbody>
                                             <?php
                                             include('inc/config.php');
-                                            $statement = $db->prepare("SELECT `full_name`,`country`,`region`,`city`,`address`,`date_of_birth`,`document_id`,`phone_number`,`tg_username`,`referral_id`,`user_status`,`language`,`id_drop_accs` FROM drop_accs ORDER BY `id_drop_accs`");
+                                            $statement = $db->prepare("SELECT `first_name`,`middle_name`,`surname`,`country`,`region`,`city`,`address`,`postcode`,`date_of_birth`,`document_id`,`phone_number`,`tg_username`,`referral_id`,`user_status`,`language`,`id_drop_accs` FROM drop_accs ORDER BY `id_drop_accs`");
                                             $drop_accs = $statement->execute();
 
                                             $statement = $db->prepare("SELECT `drop_manager_id`,`dm_tg_id`,`dm_tg_username` FROM drop_manager");
@@ -65,8 +67,19 @@ if (!isset($_SESSION['loggedin'])) {
 
                                                 #Change referral_id to manager_nickname
                                                 while ($manager_row = $drop_managers->fetchArray()) {
-                                                    if ($manager_row[1] == $users_verify_row[9])
-                                                        $users_verify_row[9] = $manager_row[2];
+                                                    if ($manager_row[1] == $users_verify_row[12])
+                                                        $users_verify_row[12] = $manager_row[2];
+                                                }
+
+                                                #Change user_status code to text
+                                                $user_status = $users_verify_row[13];
+                                                if ($user_status == "filled") {
+                                                    $user_status = "Связаться";
+                                                } elseif ($user_status == "photo") {
+                                                    $user_status = "Фото";
+                                                }
+                                                elseif ($user_status == "new") {
+                                                    $user_status = "Пустой";
                                                 }
 
                                                 #Output in table
@@ -79,11 +92,14 @@ if (!isset($_SESSION['loggedin'])) {
                                                     "</td><td class='txt'>", $users_verify_row[5],
                                                     "</td><td class='txt'>", $users_verify_row[6],
                                                     "</td><td class='txt'>", $users_verify_row[7],
-                                                    "</td><td class='txt'>", '@' . $users_verify_row[8],
-                                                    "</td><td class='txt'>", '@' . $users_verify_row[9],
+                                                    "</td><td class='txt'>", $users_verify_row[8],
+                                                    "</td><td class='txt'>", $users_verify_row[9],
                                                     "</td><td class='txt'>", $users_verify_row[10],
-                                                    "</td><td class='txt'>", $users_verify_row[11],
-                                                    "</td><td class='txt'>", $users_verify_row[12],
+                                                    "</td><td class='txt'>", '@' . $users_verify_row[11],
+                                                    "</td><td class='txt'>", '@' . $users_verify_row[12],
+                                                    "</td><td class='txt'>", $user_status,
+                                                    "</td><td class='txt'>", $users_verify_row[14],
+                                                    "</td><td class='txt'>", $users_verify_row[15],
                                                     // "</td><td>","<input type=\"checkbox\" style=\"text-align:center;\" ng-model=\"x.dedbuffer\">",
                                                     "</td></tr>";
                                             }

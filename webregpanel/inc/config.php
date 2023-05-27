@@ -1,5 +1,5 @@
 <?php
-require(".\\vendor\\autoload.php");
+require(__DIR__ .'/..'."//vendor//autoload.php");
 
 # __DIR__ location of the .env file
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);

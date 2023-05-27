@@ -57,101 +57,103 @@
                 <!-- Drop options -->
                 <!-- Create drop -->
                 <p>
-                    <input id="add_drop_tgid" type="text" class="form-control form-control-sm   "
+                    <input id="add_drop_tgid" type="text" class="form-control    "
                         placeholder="Укажите Telegram ID" name="add_drop_tgid" style="display: none">
                     <input id="add_drop_username" type="text"
-                        class="form-control form-control-sm   "
+                        class="form-control    "
                         placeholder="Укажите Telegram Username" name="add_drop_username" style="display: none">
                     <input id="add_drop_fullname" type="text"
-                        class="form-control form-control-sm   "
+                        class="form-control    "
                         placeholder="Укажите ФИО пользователя" name="add_drop_fullname" style="display: none">
                     <input id="add_drop_country" type="text"
-                        class="form-control form-control-sm   " placeholder="Укажите страну"
+                        class="form-control    " placeholder="Укажите страну"
                         name="add_drop_country" style="display: none">
                     <input id="add_drop_region" type="text"
-                        class="form-control form-control-sm   " placeholder="Укажите регион"
+                        class="form-control    " placeholder="Укажите регион"
                         name="add_drop_region" style="display: none">
-                    <input id="add_drop_city" type="text" class="form-control form-control-sm   "
+                    <input id="add_drop_city" type="text" class="form-control    "
                         placeholder="Укажите город" name="add_drop_city" style="display: none">
                     <input id="add_drop_address" type="text"
-                        class="form-control form-control-sm   " placeholder="Укажите адресс"
+                        class="form-control    " placeholder="Укажите адрес"
                         name="add_drop_address" style="display: none">
                     <input id="add_drop_dateofbirth" type="text"
-                        class="form-control form-control-sm   "
+                        class="form-control    "
                         placeholder="Укажите дату рождения" name="add_drop_dateofbirth" style="display: none">
                     <input id="add_drop_documentid" type="text"
-                        class="form-control form-control-sm   " placeholder="Укажите документы"
+                        class="form-control    " placeholder="Укажите документы"
                         name="add_drop_documentid" style="display: none">
                     <input id="add_drop_phonenumber" type="text"
-                        class="form-control form-control-sm   "
+                        class="form-control    "
                         placeholder="Укажите номер телефона" name="add_drop_phonenumber" style="display: none">
                     <input id="add_drop_referral" type="number"
-                        class="form-control form-control-sm   "
+                        class="form-control    "
                         placeholder="Укажите реферальный ид" name="add_drop_referral" style="display: none">
-                    <select id="add_drop_userstatus" class="form-control form-control-sm   "
+                    <select id="add_drop_userstatus" class="form-control    "
                         name="add_drop_userstatus" style="display: none">
                         <option value="0" disabled selected>Укажите статус пользователя</option>
                         <option value="new">Пустой</option>
-                        <option value="filled">Заполнен</option>
+                        <option value="filled">Зареган</option>
                         <option value="photo">Нужно Фото</option>
-                        <option value="declined">Заблочен</option>
+                        <option value="manual">Ручник</option>
+                        <option value="fail">Заблочен</option>
                         <option value="approved">Одобрен</option>
                     </select>
-                    <select id="add_drop_language" class="form-control form-control-sm   "
+                    <select id="add_drop_language" class="form-control    "
                         placeholder="Укажите язык пользователя" name="add_drop_language" style="display: none">
                         <option value="ru" disabled selected>Укажите язык пользователя</option>
-                        <option value="ru">ru</option>
-                        <option value="en">en</option>
+                        <option value="ru">Русский</option>
+                        <option value="en">Английский</option>
                     </select>
                 </p>
                 <!-- Edit drop -->
                 <p>
-                    <input id="edit_drop_tgid" type="text" class="form-control form-control-sm   "
+                    <input id="edit_drop_tgid" type="text" class="form-control    "
                         placeholder="Укажите Telegram ID" name="edit_drop_tgid" style="display: none">
                     <input id="edit_drop_username" type="text"
-                        class="form-control form-control-sm"
+                        class="form-control "
                         placeholder="Укажите Telegram Username" name="edit_drop_username" style="display: none">
                     <input id="edit_drop_fullname" type="text"
-                        class="form-control form-control-sm   "
+                        class="form-control    "
                         placeholder="Укажите ФИО пользователя" name="edit_drop_fullname" style="display: none">
                     <input id="edit_drop_country" type="text"
-                        class="form-control form-control-sm   " placeholder="Укажите страну"
+                        class="form-control    " placeholder="Укажите страну"
                         name="edit_drop_country" style="display: none">
                     <input id="edit_drop_region" type="text"
-                        class="form-control form-control-sm   " placeholder="Укажите регион"
+                        class="form-control    " placeholder="Укажите регион"
                         name="edit_drop_region" style="display: none">
                     <input id="edit_drop_city" type="text"
-                        class="form-control form-control-sm   " placeholder="Укажите город"
+                        class="form-control    " placeholder="Укажите город"
                         name="edit_drop_city" style="display: none">
                     <input id="edit_drop_address" type="text"
-                        class="form-control form-control-sm   " placeholder="Укажите адрес"
+                        class="form-control    " placeholder="Укажите адрес"
                         name="edit_drop_address" style="display: none">
                     <input id="edit_drop_dateofbirth" type="text"
-                        class="form-control form-control-sm   "
+                        class="form-control    "
                         placeholder="Укажите дату рождения" name="edit_drop_dateofbirth" style="display: none">
                     <input id="edit_drop_documentid" type="text"
-                        class="form-control form-control-sm   " placeholder="Укажите документы"
+                        class="form-control    " placeholder="Укажите документы"
                         name="edit_drop_documentid" style="display: none">
                     <input id="edit_drop_phonenumber" type="text"
-                        class="form-control form-control-sm   "
+                        class="form-control    "
                         placeholder="Укажите номер телефона" name="edit_drop_phonenumber" style="display: none">
                     <input id="edit_drop_referral" type="number"
-                        class="form-control form-control-sm   "
+                        class="form-control    "
                         placeholder="Укажите реферальный ид" name="edit_drop_referral" style="display: none">
-                    <select id="edit_drop_userstatus" class="form-control form-control-sm   "
+                    <select id="edit_drop_userstatus" class="form-control    "
                         name="edit_drop_userstatus" style="display: none">
                         <option value="0" disabled selected>Укажите статус пользователя</option>
                         <option value="new">Пустой</option>
                         <option value="filled">Заполнен</option>
                         <option value="photo">Нужно Фото</option>
-                        <option value="declined">Заблочен</option>
+                        <option value="manual">Ручник</option>
+                        <option value="fail">Заблочен</option>
                         <option value="approved">Одобрен</option>
                     </select>
-                    <select id="edit_drop_language" class="form-control form-control-sm   "
+                    <select id="edit_drop_language" class="form-control    "
                         placeholder="Укажите язык пользователя" name="edit_drop_language" style="display: none">
                         <option value="ru" disabled selected>Укажите язык пользователя</option>
-                        <option value="ru">ru</option>
-                        <option value="en">en</option>
+                        <option value="ru">Русский</option>
+                        <option value="en">Английский</option>
                     </select>
                 </p>
 
