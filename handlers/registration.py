@@ -30,6 +30,7 @@ class RegStates(StatesGroup):
     address = State()
     postcode = State()
     date_of_birth = State()
+    document_type = State()
     document_id = State()
     phonenumber = State()
 
@@ -41,7 +42,7 @@ async def cm_start(message: types.Message, state: FSMContext):
         ## Send user to main menu
         user_language = db.get_user_language(message.from_user.id)
         await state.set_state(None)
-        await message.answer(set_localization('Привет ',user_language), parse_mode="html", reply_markup=nav.mainMenu(user_language))
+        await message.answer(set_localization('Привет ',user_language) + str(message.from_user.username), parse_mode="html", reply_markup=nav.mainMenu(user_language))
         ## If user manager
         if(db.is_user_manager(message.from_user.id)):
             await state.set_state(None)
@@ -97,7 +98,7 @@ async def setLanguage(callback: types.CallbackQuery, state: FSMContext):
     lang = callback.data[5:]
     db.change_user_language(callback.from_user.id, lang)
     await bot.delete_message(callback.from_user.id, callback.message.message_id)
-    await bot.send_message(callback.from_user.id, callback.from_user.username + " " +nav.set_localization("Привет!", lang), reply_markup=nav.mainMenu(lang))
+    await bot.send_message(callback.from_user.id, callback.from_user.username + " " +nav.set_localization("привет, прочитай информацию!", lang), reply_markup=nav.mainMenu(lang))
     logging.debug("###DEBUG### setLanguage finished")
 
 @dp.callback_query_handler(text_contains = "managerstats", state=None)
@@ -176,31 +177,31 @@ async def input_country(message: types.Message, state: FSMContext):
         return
 
 async def input_region(message: types.Message, state: FSMContext):
-        user_language = db.get_user_language(message.from_user.id)
-        if message.text.lower() in config.forbidden_regions:
-            await message.answer(set_localization("Извините, но регистрация недоступна для граждан вашего региона", user_language) +random.choice(config.bad_reaction), reply_markup=nav.mainMenu(user_language))
-            await state.finish()
-            return
-        else:
-            if (not isEnglish(message.text.lower())):
-                await message.answer(set_localization(
-                    "Пожалуйста, укажите данные на английском языке и латинскими буквами ", user_language)+random.choice(config.bad_reaction))
-                return
-            ## Save region to state data
-            await state.update_data(region=message.text.lower())
-            await RegStates.city.set()
-            await message.answer(set_localization('Введите название города',user_language))
-
-async def input_city(message: types.Message, state: FSMContext):
-        user_language = db.get_user_language(message.from_user.id)
+    user_language = db.get_user_language(message.from_user.id)
+    if message.text.lower() in config.forbidden_regions:
+        await message.answer(set_localization("Извините, но регистрация недоступна для граждан вашего региона", user_language) +random.choice(config.bad_reaction), reply_markup=nav.mainMenu(user_language))
+        await state.finish()
+        return
+    else:
         if (not isEnglish(message.text.lower())):
             await message.answer(set_localization(
-            "Пожалуйста, укажите данные на английском языке и латинскими буквами ", user_language)+random.choice(config.bad_reaction))
+                "Пожалуйста, укажите данные на английском языке и латинскими буквами ", user_language)+random.choice(config.bad_reaction))
             return
-        ## Save city to state data
-        await state.update_data(city=message.text.lower())
-        await RegStates.firstname.set()
-        await message.answer(set_localization('Введите ваше Имя',user_language))
+        ## Save region to state data
+        await state.update_data(region=message.text.lower())
+        await RegStates.city.set()
+        await message.answer(set_localization('Введите название города',user_language))
+
+async def input_city(message: types.Message, state: FSMContext):
+    user_language = db.get_user_language(message.from_user.id)
+    if (not isEnglish(message.text.lower())):
+        await message.answer(set_localization(
+        "Пожалуйста, укажите данные на английском языке и латинскими буквами ", user_language)+random.choice(config.bad_reaction))
+        return
+    ## Save city to state data
+    await state.update_data(city=message.text.lower())
+    await RegStates.firstname.set()
+    await message.answer(set_localization('Введите ваше Имя',user_language))
 
 # async def input_fullname(message: types.Message, state: FSMContext):
 #     user_language = db.get_user_language(message.from_user.id)
@@ -260,27 +261,59 @@ async def input_surname(message: types.Message, state: FSMContext):
 
 async def input_address(message: types.Message, state: FSMContext):
     user_language = db.get_user_language(message.from_user.id)
+    if (not isEnglish(message.text.lower())):
+        await message.answer(set_localization(
+        "Пожалуйста, укажите данные на английском языке и латинскими буквами ", user_language)+random.choice(config.bad_reaction))
+        return
     await state.update_data(address=str(message.text))
     await RegStates.postcode.set()
     await message.answer(set_localization("Укажите ваш Почтовый Индекс (Postcode)",user_language))
 
 async def input_postcode(message: types.Message, state: FSMContext):
     user_language = db.get_user_language(message.from_user.id)
+    if (not isEnglish(message.text.lower())):
+        await message.answer(set_localization(
+        "Пожалуйста, укажите данные на английском языке и латинскими буквами ", user_language)+random.choice(config.bad_reaction))
+        return
     await state.update_data(postcode=str(message.text))
     await RegStates.date_of_birth.set()
-    await message.answer(set_localization("Укажите свою Дату Рождения в формате День-Месяц-Год",user_language))
+    await message.answer(set_localization("Укажите свою Дату Рождения в формате День-Месяц-Год (05-04-1980)",user_language))
  
 async def input_date_of_birth(message: types.Message, state: FSMContext):
     user_language = db.get_user_language(message.from_user.id)
+    if (not isEnglish(message.text.lower())):
+        await message.answer(set_localization(
+        "Пожалуйста, укажите данные на английском языке и латинскими буквами ", user_language)+random.choice(config.bad_reaction))
+        return
     await state.update_data(date_of_birth=str(message.text))
+    await RegStates.document_type.set()
+    await message.answer(set_localization("Выберите тип вашего документа",user_language), reply_markup=nav.documentMenu(user_language))
+
+@dp.callback_query_handler(state=RegStates.document_type)
+async def input_document_type(call: types.CallbackQuery, state: FSMContext):
+    user_language = db.get_user_language(call.message.from_user.id)
+    # if (not isEnglish(callmessage.text.lower())):
+    #     await message.answer(set_localization(
+    #     "Пожалуйста, укажите данные на английском языке и латинскими буквами ", user_language)+random.choice(config.bad_reaction))
+    #     return
+    if(call.data == "passportid"):
+        await state.update_data(document_type = "Passport | ")
+    elif(call.data == "driverid"):
+        await state.update_data(document_type = "DriverID | ")
+    elif(call.data == "identifnumberid"):
+        await state.update_data(document_type = "IdentificationID | ")
     await RegStates.document_id.set()
-    await message.answer(set_localization("Укажите номер вашего Паспорта или Водительской Лицензии",user_language))
+    await call.message.answer(set_localization("Укажите номер вашего документа", user_language))
 
 async def input_document_id(message: types.Message, state: FSMContext):
     user_language = db.get_user_language(message.from_user.id)
-    await state.update_data(document_id=str(message.text))
+    if (not isEnglish(message.text.lower())):
+        await message.answer(set_localization(
+        "Пожалуйста, укажите данные на английском языке и латинскими буквами ", user_language)+random.choice(config.bad_reaction))
+        return
+    await state.update_data(document_id = str(message.text))
     await RegStates.phonenumber.set()
-    await message.answer(set_localization("Укажите номер вашего Мобильного Телефона",user_language))
+    await message.answer(set_localization("Укажите полный номер вашего Мобильного Телефона (с кодом страны)",user_language))
 
 async def input_phonenumber(message: types.Message, state: FSMContext):
     user_language = db.get_user_language(message.from_user.id)
@@ -312,7 +345,7 @@ async def input_phonenumber(message: types.Message, state: FSMContext):
                         data['address'],
                         data['postcode'],
                         data['date_of_birth'],
-                        data['document_id'],
+                        data['document_type'] + data['document_id'],
                         data['phone_number'])
     logging.debug("DB user data update in table!")
     ## Notify drop manager about filled user
@@ -336,7 +369,7 @@ async def input_phonenumber(message: types.Message, state: FSMContext):
                                    "\nАдрес: " + str(data['address']) +
                                    "\nПочтовый индекс: " + str(data['postcode']) +
                                    "\nДата рождения: " + str(data['date_of_birth']) +
-                                   "\nДокумент ID: " + str(data['document_id']) +
+                                   "\nДокумент ID: " + str(data['document_type']) + str(data['document_id']) +
                                    "\nТелефон: " + str(data['phone_number'])
                                    , parse_mode="html")
     except:
@@ -361,5 +394,6 @@ def register_handlers_registration(dp : Dispatcher):
     dp.register_message_handler(input_address, state=RegStates.address)
     dp.register_message_handler(input_postcode, state=RegStates.postcode)
     dp.register_message_handler(input_date_of_birth, state=RegStates.date_of_birth)
+    dp.register_message_handler(input_document_type, state=RegStates.document_type)
     dp.register_message_handler(input_document_id, state=RegStates.document_id)
     dp.register_message_handler(input_phonenumber, state=RegStates.phonenumber)

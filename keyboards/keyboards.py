@@ -20,6 +20,16 @@ def mainMenu(lang='ru'):
 
     return mainMenu
 
+def documentMenu(lang='ru'):
+    documentMenu = InlineKeyboardMarkup(resize_keyboard = True, row_width=1)
+
+    btnPassport = InlineKeyboardButton(set_localization("Паспорт", lang),callback_data='passportid')
+    btnDriver = InlineKeyboardButton(set_localization("Водительское Удостоверение", lang),callback_data='driverid')
+    btnIdentif = InlineKeyboardButton(set_localization("ID-Карта", lang),callback_data='identifnumberid')
+    
+    documentMenu.add(btnPassport, btnDriver, btnIdentif)
+    return documentMenu
+
 def managerMenu(lang='ru'):
     managerMenu = InlineKeyboardMarkup(resize_keyboard = True)
 

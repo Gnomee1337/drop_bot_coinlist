@@ -77,7 +77,7 @@ class Database:
             sql = "SELECT `language` FROM `drop_accs` WHERE `tg_id` = ?"
             result = self.cursor.execute(sql, (user_id,)).fetchone()
             # result = self.cursor.fetchone()
-            if result[0] is not None:
+            if result is not None:
                 return result[0]
             else:
                 return 'ru'
