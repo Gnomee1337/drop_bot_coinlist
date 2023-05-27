@@ -57,39 +57,36 @@
                 <!-- Drop options -->
                 <!-- Create drop -->
                 <p>
-                    <input id="add_drop_tgid" type="text" class="form-control    "
-                        placeholder="Укажите Telegram ID" name="add_drop_tgid" style="display: none">
-                    <input id="add_drop_username" type="text"
-                        class="form-control    "
+                    <input id="add_drop_tgid" type="text" class="form-control    " placeholder="Укажите Telegram ID"
+                        name="add_drop_tgid" style="display: none">
+                    <input id="add_drop_username" type="text" class="form-control    "
                         placeholder="Укажите Telegram Username" name="add_drop_username" style="display: none">
-                    <input id="add_drop_fullname" type="text"
-                        class="form-control    "
-                        placeholder="Укажите ФИО пользователя" name="add_drop_fullname" style="display: none">
-                    <input id="add_drop_country" type="text"
-                        class="form-control    " placeholder="Укажите страну"
+                    <input id="add_drop_firstname" type="text" class="form-control    "
+                        placeholder="Укажите Имя пользователя" name="add_drop_firstname" style="display: none">
+                    <input id="add_drop_middlename" type="text" class="form-control    "
+                        placeholder="Укажите Отчество пользователя" name="add_drop_middlename" style="display: none">
+                    <input id="add_drop_surname" type="text" class="form-control    "
+                        placeholder="Укажите Фамилию пользователя" name="add_drop_surname" style="display: none">
+                    <input id="add_drop_country" type="text" class="form-control    " placeholder="Укажите страну"
                         name="add_drop_country" style="display: none">
-                    <input id="add_drop_region" type="text"
-                        class="form-control    " placeholder="Укажите регион"
+                    <input id="add_drop_region" type="text" class="form-control    " placeholder="Укажите регион"
                         name="add_drop_region" style="display: none">
-                    <input id="add_drop_city" type="text" class="form-control    "
-                        placeholder="Укажите город" name="add_drop_city" style="display: none">
-                    <input id="add_drop_address" type="text"
-                        class="form-control    " placeholder="Укажите адрес"
+                    <input id="add_drop_city" type="text" class="form-control    " placeholder="Укажите город"
+                        name="add_drop_city" style="display: none">
+                    <input id="add_drop_address" type="text" class="form-control    " placeholder="Укажите адрес"
                         name="add_drop_address" style="display: none">
-                    <input id="add_drop_dateofbirth" type="text"
-                        class="form-control    "
+                    <input id="add_drop_postcode" type="text" class="form-control    "
+                        placeholder="Укажите почтовый индекс" name="add_drop_postcode" style="display: none">
+                    <input id="add_drop_dateofbirth" type="text" class="form-control    "
                         placeholder="Укажите дату рождения" name="add_drop_dateofbirth" style="display: none">
-                    <input id="add_drop_documentid" type="text"
-                        class="form-control    " placeholder="Укажите документы"
+                    <input id="add_drop_documentid" type="text" class="form-control    " placeholder="Укажите документы"
                         name="add_drop_documentid" style="display: none">
-                    <input id="add_drop_phonenumber" type="text"
-                        class="form-control    "
+                    <input id="add_drop_phonenumber" type="text" class="form-control    "
                         placeholder="Укажите номер телефона" name="add_drop_phonenumber" style="display: none">
-                    <input id="add_drop_referral" type="number"
-                        class="form-control    "
+                    <input id="add_drop_referral" type="number" class="form-control    "
                         placeholder="Укажите реферальный ид" name="add_drop_referral" style="display: none">
-                    <select id="add_drop_userstatus" class="form-control    "
-                        name="add_drop_userstatus" style="display: none">
+                    <select id="add_drop_userstatus" class="form-control    " name="add_drop_userstatus"
+                        style="display: none">
                         <option value="0" disabled selected>Укажите статус пользователя</option>
                         <option value="new">Пустой</option>
                         <option value="filled">Зареган</option>
@@ -98,8 +95,8 @@
                         <option value="fail">Заблочен</option>
                         <option value="approved">Одобрен</option>
                     </select>
-                    <select id="add_drop_language" class="form-control    "
-                        placeholder="Укажите язык пользователя" name="add_drop_language" style="display: none">
+                    <select id="add_drop_language" class="form-control    " placeholder="Укажите язык пользователя"
+                        name="add_drop_language" style="display: none">
                         <option value="ru" disabled selected>Укажите язык пользователя</option>
                         <option value="ru">Русский</option>
                         <option value="en">Английский</option>
@@ -107,40 +104,36 @@
                 </p>
                 <!-- Edit drop -->
                 <p>
-                    <input id="edit_drop_tgid" type="text" class="form-control    "
-                        placeholder="Укажите Telegram ID" name="edit_drop_tgid" style="display: none">
-                    <input id="edit_drop_username" type="text"
-                        class="form-control "
+                    <input id="edit_drop_tgid" type="text" class="form-control    " placeholder="Укажите Telegram ID"
+                        name="edit_drop_tgid" style="display: none">
+                    <input id="edit_drop_username" type="text" class="form-control "
                         placeholder="Укажите Telegram Username" name="edit_drop_username" style="display: none">
-                    <input id="edit_drop_fullname" type="text"
-                        class="form-control    "
-                        placeholder="Укажите ФИО пользователя" name="edit_drop_fullname" style="display: none">
-                    <input id="edit_drop_country" type="text"
-                        class="form-control    " placeholder="Укажите страну"
+                    <input id="edit_drop_firstname" type="text" class="form-control    "
+                        placeholder="Укажите Имя пользователя" name="edit_drop_firstname" style="display: none">
+                    <input id="edit_drop_middlename" type="text" class="form-control    "
+                        placeholder="Укажите Отчество пользователя" name="edit_drop_middlename" style="display: none">
+                    <input id="edit_drop_surname" type="text" class="form-control    "
+                        placeholder="Укажите Фамилию пользователя" name="edit_drop_surname" style="display: none">
+                    <input id="edit_drop_country" type="text" class="form-control    " placeholder="Укажите страну"
                         name="edit_drop_country" style="display: none">
-                    <input id="edit_drop_region" type="text"
-                        class="form-control    " placeholder="Укажите регион"
+                    <input id="edit_drop_region" type="text" class="form-control    " placeholder="Укажите регион"
                         name="edit_drop_region" style="display: none">
-                    <input id="edit_drop_city" type="text"
-                        class="form-control    " placeholder="Укажите город"
+                    <input id="edit_drop_city" type="text" class="form-control    " placeholder="Укажите город"
                         name="edit_drop_city" style="display: none">
-                    <input id="edit_drop_address" type="text"
-                        class="form-control    " placeholder="Укажите адрес"
+                    <input id="edit_drop_address" type="text" class="form-control    " placeholder="Укажите адрес"
                         name="edit_drop_address" style="display: none">
-                    <input id="edit_drop_dateofbirth" type="text"
-                        class="form-control    "
+                    <input id="edit_drop_postcode" type="text" class="form-control    "
+                        placeholder="Укажите почтовый индекс" name="edit_drop_postcode" style="display: none">
+                    <input id="edit_drop_dateofbirth" type="text" class="form-control    "
                         placeholder="Укажите дату рождения" name="edit_drop_dateofbirth" style="display: none">
-                    <input id="edit_drop_documentid" type="text"
-                        class="form-control    " placeholder="Укажите документы"
-                        name="edit_drop_documentid" style="display: none">
-                    <input id="edit_drop_phonenumber" type="text"
-                        class="form-control    "
+                    <input id="edit_drop_documentid" type="text" class="form-control    "
+                        placeholder="Укажите документы" name="edit_drop_documentid" style="display: none">
+                    <input id="edit_drop_phonenumber" type="text" class="form-control    "
                         placeholder="Укажите номер телефона" name="edit_drop_phonenumber" style="display: none">
-                    <input id="edit_drop_referral" type="number"
-                        class="form-control    "
+                    <input id="edit_drop_referral" type="number" class="form-control    "
                         placeholder="Укажите реферальный ид" name="edit_drop_referral" style="display: none">
-                    <select id="edit_drop_userstatus" class="form-control    "
-                        name="edit_drop_userstatus" style="display: none">
+                    <select id="edit_drop_userstatus" class="form-control    " name="edit_drop_userstatus"
+                        style="display: none">
                         <option value="0" disabled selected>Укажите статус пользователя</option>
                         <option value="new">Пустой</option>
                         <option value="filled">Заполнен</option>
@@ -149,8 +142,8 @@
                         <option value="fail">Заблочен</option>
                         <option value="approved">Одобрен</option>
                     </select>
-                    <select id="edit_drop_language" class="form-control    "
-                        placeholder="Укажите язык пользователя" name="edit_drop_language" style="display: none">
+                    <select id="edit_drop_language" class="form-control    " placeholder="Укажите язык пользователя"
+                        name="edit_drop_language" style="display: none">
                         <option value="ru" disabled selected>Укажите язык пользователя</option>
                         <option value="ru">Русский</option>
                         <option value="en">Английский</option>
@@ -162,38 +155,41 @@
                     var doc = document,
                         sel = doc.getElementById('select1'),
                         //Add user
-                        adds1 = doc.getElementById('add_drop_fullname'),
-                        adds2 = doc.getElementById('add_drop_country'),
-                        adds3 = doc.getElementById('add_drop_region'),
-                        adds4 = doc.getElementById('add_drop_city'),
-                        adds5 = doc.getElementById('add_drop_address'),
-                        adds6 = doc.getElementById('add_drop_dateofbirth'),
-                        adds7 = doc.getElementById('add_drop_documentid'),
-                        adds8 = doc.getElementById('add_drop_phonenumber'),
-                        adds9 = doc.getElementById('add_drop_referral'),
-                        adds10 = doc.getElementById('add_drop_userstatus'),
-                        adds11 = doc.getElementById('add_drop_language'),
+                        adds1 = doc.getElementById('add_drop_tgid'),
+                        adds2 = doc.getElementById('add_drop_username'),
+                        adds3 = doc.getElementById('add_drop_firstname'),
+                        adds4 = doc.getElementById('add_drop_middlename'),
+                        adds5 = doc.getElementById('add_drop_surname'),
+                        adds6 = doc.getElementById('add_drop_country'),
+                        adds7 = doc.getElementById('add_drop_region'),
+                        adds8 = doc.getElementById('add_drop_city'),
+                        adds9 = doc.getElementById('add_drop_address'),
+                        adds10 = doc.getElementById('add_drop_postcode'),
+                        adds11 = doc.getElementById('add_drop_dateofbirth'),
+                        adds12 = doc.getElementById('add_drop_documentid'),
+                        adds13 = doc.getElementById('add_drop_phonenumber'),
+                        adds14 = doc.getElementById('add_drop_referral'),
+                        adds15 = doc.getElementById('add_drop_userstatus'),
+                        adds16 = doc.getElementById('add_drop_language'),
 
                         //Edit user
-                        adds12 = doc.getElementById('edit_drop_fullname'),
-                        adds13 = doc.getElementById('edit_drop_country'),
-                        adds14 = doc.getElementById('edit_drop_region'),
-                        adds15 = doc.getElementById('edit_drop_city'),
-                        adds16 = doc.getElementById('edit_drop_address'),
-                        adds17 = doc.getElementById('edit_drop_dateofbirth'),
-                        adds18 = doc.getElementById('edit_drop_documentid'),
-                        adds19 = doc.getElementById('edit_drop_phonenumber'),
-                        adds20 = doc.getElementById('edit_drop_referral'),
-                        adds21 = doc.getElementById('edit_drop_userstatus'),
-                        adds22 = doc.getElementById('edit_drop_language'),
+                        adds17 = doc.getElementById('edit_drop_tgid'),
+                        adds18 = doc.getElementById('edit_drop_username');
+                    adds19 = doc.getElementById('edit_drop_firstname'),
+                        adds20 = doc.getElementById('edit_drop_middlename'),
+                        adds21 = doc.getElementById('edit_drop_surname'),
+                        adds22 = doc.getElementById('edit_drop_country'),
+                        adds23 = doc.getElementById('edit_drop_region'),
+                        adds24 = doc.getElementById('edit_drop_city'),
+                        adds25 = doc.getElementById('edit_drop_address'),
+                        adds26 = doc.getElementById('edit_drop_postcode'),
+                        adds27 = doc.getElementById('edit_drop_dateofbirth'),
+                        adds28 = doc.getElementById('edit_drop_documentid'),
+                        adds29 = doc.getElementById('edit_drop_phonenumber'),
+                        adds30 = doc.getElementById('edit_drop_referral'),
+                        adds31 = doc.getElementById('edit_drop_userstatus'),
+                        adds32 = doc.getElementById('edit_drop_language');
 
-                        //Add user
-                        adds23 = doc.getElementById('add_drop_tgid'),
-                        adds24 = doc.getElementById('add_drop_username'),
-                        
-                        //Edit user
-                        adds25 = doc.getElementById('edit_drop_tgid'),
-                        adds26 = doc.getElementById('edit_drop_username');
                     sel.addEventListener('change', function () {
                         //Add
                         adds1.style.display = this.value == "cmd_drop_add" ? 'block' : 'none';
@@ -207,24 +203,30 @@
                         adds9.style.display = this.value == "cmd_drop_add" ? 'block' : 'none';
                         adds10.style.display = this.value == "cmd_drop_add" ? 'block' : 'none';
                         adds11.style.display = this.value == "cmd_drop_add" ? 'block' : 'none';
-                        adds23.style.display = this.value == "cmd_drop_add" ? 'block' : 'none';
-                        adds24.style.display = this.value == "cmd_drop_add" ? 'block' : 'none';
+                        adds12.style.display = this.value == "cmd_drop_add" ? 'block' : 'none';
+                        adds13.style.display = this.value == "cmd_drop_add" ? 'block' : 'none';
+                        adds14.style.display = this.value == "cmd_drop_add" ? 'block' : 'none';
+                        adds15.style.display = this.value == "cmd_drop_add" ? 'block' : 'none';
+                        adds16.style.display = this.value == "cmd_drop_add" ? 'block' : 'none';
 
 
                         //Edit
-                        adds12.style.display = this.value == "cmd_drop_edit" ? 'block' : 'none';
-                        adds13.style.display = this.value == "cmd_drop_edit" ? 'block' : 'none';
-                        adds14.style.display = this.value == "cmd_drop_edit" ? 'block' : 'none';
-                        adds15.style.display = this.value == "cmd_drop_edit" ? 'block' : 'none';
-                        adds16.style.display = this.value == "cmd_drop_edit" ? 'block' : 'none';
                         adds17.style.display = this.value == "cmd_drop_edit" ? 'block' : 'none';
                         adds18.style.display = this.value == "cmd_drop_edit" ? 'block' : 'none';
                         adds19.style.display = this.value == "cmd_drop_edit" ? 'block' : 'none';
                         adds20.style.display = this.value == "cmd_drop_edit" ? 'block' : 'none';
                         adds21.style.display = this.value == "cmd_drop_edit" ? 'block' : 'none';
                         adds22.style.display = this.value == "cmd_drop_edit" ? 'block' : 'none';
+                        adds23.style.display = this.value == "cmd_drop_edit" ? 'block' : 'none';
+                        adds24.style.display = this.value == "cmd_drop_edit" ? 'block' : 'none';
                         adds25.style.display = this.value == "cmd_drop_edit" ? 'block' : 'none';
                         adds26.style.display = this.value == "cmd_drop_edit" ? 'block' : 'none';
+                        adds27.style.display = this.value == "cmd_drop_edit" ? 'block' : 'none';
+                        adds28.style.display = this.value == "cmd_drop_edit" ? 'block' : 'none';
+                        adds29.style.display = this.value == "cmd_drop_edit" ? 'block' : 'none';
+                        adds30.style.display = this.value == "cmd_drop_edit" ? 'block' : 'none';
+                        adds31.style.display = this.value == "cmd_drop_edit" ? 'block' : 'none';
+                        adds32.style.display = this.value == "cmd_drop_edit" ? 'block' : 'none';
                     },
                         false);
                 </script>

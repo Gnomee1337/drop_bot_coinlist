@@ -1,9 +1,13 @@
 <?php
-session_start();
+$status = session_status();
+if($status == PHP_SESSION_NONE){
+    //There is no active session
+    session_start();
+}
 // $auth = $_SESSION["auth"];
 // if ($auth == "1") {
 if (!isset($_SESSION['loggedin'])) {
-  header('Location: phplogin/login.php');
+  header('Location: login.php');
   exit;
 } else {
   ?>

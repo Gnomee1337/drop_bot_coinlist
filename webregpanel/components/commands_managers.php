@@ -46,7 +46,7 @@
                             </td>
                             <!-- Execute row -->
                             <td>
-                                <button type="submit" name="form_drops" for="form_drops"
+                                <button type="submit" name="form_drop_managers" for="form_drop_managers"
                                     class="btn btn-block btn-primary">
                                     Выполнить команду
                                 </button>

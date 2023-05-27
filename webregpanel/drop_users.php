@@ -1,7 +1,11 @@
 <?php
-session_start();
+$status = session_status();
+if ($status == PHP_SESSION_NONE) {
+    //There is no active session
+    session_start();
+}
 if (!isset($_SESSION['loggedin'])) {
-    header('Location: phplogin/login.php');
+    header('Location: login.php');
     exit;
 } else {
     ?>
@@ -30,9 +34,10 @@ if (!isset($_SESSION['loggedin'])) {
                             Пользователи
                         </div>
                         <div class="card-body ">
-                            <div class="container text-center bg-sondary  ">
-                                <div class="table-responsive pt-4 pb-4 ">
-                                    <table class="table table-bordered table-hover " id="dataTable" width="100%" cellspacing="0">
+                            <!-- <div class="container text-center bg-sondary  "> -->
+                                <div class="table-responsive display responsive nowrap">
+                                    <table class="table table-bordered table-hover " id="dataTable" width="100%"
+                                        cellspacing="0">
                                         <thead>
                                             <tr>
                                                 <th>Имя</th>
@@ -74,12 +79,15 @@ if (!isset($_SESSION['loggedin'])) {
                                                 #Change user_status code to text
                                                 $user_status = $users_verify_row[13];
                                                 if ($user_status == "filled") {
-                                                    $user_status = "Связаться";
+                                                    $user_status = "Зареган";
                                                 } elseif ($user_status == "photo") {
                                                     $user_status = "Фото";
-                                                }
-                                                elseif ($user_status == "new") {
+                                                } elseif ($user_status == "new") {
                                                     $user_status = "Пустой";
+                                                } elseif ($user_status == "manual") {
+                                                    $user_status = "Ручник";
+                                                } elseif ($user_status == "fail") {
+                                                    $user_status = "Фейл";
                                                 }
 
                                                 #Output in table
@@ -107,9 +115,9 @@ if (!isset($_SESSION['loggedin'])) {
                                         </tbody>
                                     </table>
                                 </div>
-                            </div>
+                            <!-- </div> -->
                         </div>
-                        <form method="POST" action="server.php" id="form_drop_users" name="form_drop_users">
+                        <form method="POST" action="server.php" id="form_drops" name="form_drops">
                             <div class="card-footer ">
                                 <?php include_once 'components/commands_drops.php'; ?>
                             </div>
