@@ -33,6 +33,7 @@ class RegStates(StatesGroup):
     document_type = State()
     document_id = State()
     phonenumber = State()
+    submitdata = State()
 
 # @dp.message_handler(commands='start')
 async def cm_start(message: types.Message, state: FSMContext):
@@ -331,54 +332,73 @@ async def input_phonenumber(message: types.Message, state: FSMContext):
                 "Некорректный номер телефона, возможно вы ошиблись ",user_language)+random.choice(config.incorrect_reaction))
             return
     await state.update_data(phone_number=message.text)
-    data = await state.get_data()
-    ## Update user data in table
-    db.add_user_account(data['tg_id'],
-                        data['tg_username'],
-                        data['country'],
-                        data['region'],
-                        data['city'],
-                        #data['full_name'],
-                        data['first_name'],
-                        data['middle_name'],
-                        data['surname'],
-                        data['address'],
-                        data['postcode'],
-                        data['date_of_birth'],
-                        data['document_type'] + data['document_id'],
-                        data['phone_number'])
-    logging.debug("DB user data update in table!")
-    ## Notify drop manager about filled user
-    drop_manager_id = db.get_user_referral(data['tg_id'])
-    if(drop_manager_id != ""):
-        manager_language = db.get_user_language(drop_manager_id)
-        await bot.send_message(drop_manager_id, "@" + data['tg_username'] + set_localization(" заполнил свои данные и ждет прохождения верификации!", manager_language))
-    ## Notify top manager for new filled user
-    top_managers = db.get_top_managers()
-    try:
-        for manager in top_managers[0]:
-            manager_language = db.get_user_language(manager)
-            await bot.send_message(manager, 
-                                   "@" + data['tg_username'] + "<b>"+set_localization(" заполнил свои данные и ждет прохождения верификации!", manager_language) + "</b>" +
-                                   "\nСтрана: " + str(data['country']) +
-                                   "\nРегион: " + str(data['region']) +
-                                   "\nГород: " + str(data['city']) +
-                                   "\nИмя: " + str(data['first_name']) +
-                                   "\nОтчество: " + str(data['middle_name']) +
-                                   "\nФамилия: " + str(data['surname']) +
-                                   "\nАдрес: " + str(data['address']) +
-                                   "\nПочтовый индекс: " + str(data['postcode']) +
-                                   "\nДата рождения: " + str(data['date_of_birth']) +
-                                   "\nДокумент ID: " + str(data['document_type']) + str(data['document_id']) +
-                                   "\nТелефон: " + str(data['phone_number'])
-                                   , parse_mode="html")
-    except:
-        pass
-    await state.finish()
-    await message.answer('🎉')
-    await clear_chat(message.message_id, message.chat.id)
-    await message.answer(set_localization("Поздравляю, информация сохранена!",user_language))
-    await message.answer(set_localization("Скоро с вами свяжется менеджер для прохождения верификации и выплаты 💰",user_language), reply_markup=nav.mainMenu(user_language))
+    await RegStates.submitdata.set()
+    await message.answer(set_localization("Вы уверены, что указали данные верни?",user_language), reply_markup=nav.submitMenu(user_language))
+
+    @dp.callback_query_handler(state=RegStates.submitdata)
+    async def submit_data(call: types.CallbackQuery, state: FSMContext):
+        if call.message:
+            if call.data == "submitdata":
+                data = await state.get_data()
+                ## Update user data in table
+                db.add_user_account(data['tg_id'],
+                                    data['tg_username'],
+                                    data['country'],
+                                    data['region'],
+                                    data['city'],
+                                    #data['full_name'],
+                                    data['first_name'],
+                                    data['middle_name'],
+                                    data['surname'],
+                                    data['address'],
+                                    data['postcode'],
+                                    data['date_of_birth'],
+                                    data['document_type'] + data['document_id'],
+                                    data['phone_number'])
+                logging.debug("DB user data update in table!")
+                ## Notify drop manager about filled user
+                drop_manager_id = db.get_user_referral(data['tg_id'])
+                if(drop_manager_id != ""):
+                    manager_language = db.get_user_language(drop_manager_id)
+                    await bot.send_message(drop_manager_id, "@" + data['tg_username'] + set_localization(" заполнил свои данные и ждет прохождения верификации!", manager_language))
+                ## Notify top manager for new filled user
+                top_managers = db.get_top_managers()
+                try:
+                    for manager in top_managers[0]:
+                        manager_language = db.get_user_language(manager)
+                        await bot.send_message(manager, 
+                                               "@" + data['tg_username'] + "<b>"+set_localization(" заполнил свои данные и ждет прохождения верификации!", manager_language) + "</b>" +
+                                               "\nСтрана: " + str(data['country']) +
+                                               "\nРегион: " + str(data['region']) +
+                                               "\nГород: " + str(data['city']) +
+                                               "\nИмя: " + str(data['first_name']) +
+                                               "\nОтчество: " + str(data['middle_name']) +
+                                               "\nФамилия: " + str(data['surname']) +
+                                               "\nАдрес: " + str(data['address']) +
+                                               "\nПочтовый индекс: " + str(data['postcode']) +
+                                               "\nДата рождения: " + str(data['date_of_birth']) +
+                                               "\nДокумент ID: " + str(data['document_type']) + str(data['document_id']) +
+                                               "\nТелефон: " + str(data['phone_number'])
+                                               , parse_mode="html")
+                except:
+                    pass
+                await state.finish()
+                await message.answer('🎉')
+                await clear_chat(message.message_id, message.chat.id)
+                await message.answer(set_localization("Поздравляю, информация сохранена!",user_language))
+                await message.answer(set_localization("Скоро с вами свяжется менеджер для прохождения верификации и выплаты 💰",user_language), reply_markup=nav.mainMenu(user_language))
+            if call.data == "declinedata":
+                #Allow user to cancel any action
+                current_state = await state.get_state()
+                if current_state is None:
+                    return
+                logging.info('Cancelling state %r', current_state)
+                # Cancel state and inform user about it
+                await state.finish()
+                # And remove keyboard (just in case)
+                #await message.reply('Отмена.\nCancelled.', reply_markup=types.ReplyKeyboardRemove())
+                await message.reply('Отмена.\nCancelled.', reply_markup=nav.mainMenu())
+
 
 def register_handlers_registration(dp : Dispatcher):
     dp.register_message_handler(cm_start, commands=['start'], state=None)

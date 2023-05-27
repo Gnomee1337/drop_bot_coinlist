@@ -30,6 +30,15 @@ def documentMenu(lang='ru'):
     documentMenu.add(btnPassport, btnDriver, btnIdentif)
     return documentMenu
 
+def submitMenu(lang='ru'):
+    submitMenu = InlineKeyboardMarkup(resize_keyboard = True)
+    
+    btnSend = InlineKeyboardButton(set_localization("Отправить", lang),callback_data='submitdata')
+    btnDecline = InlineKeyboardButton(set_localization("Отменить", lang),callback_data='declinedata')
+
+    submitMenu.add(btnSend, btnDecline)
+    return submitMenu
+
 def managerMenu(lang='ru'):
     managerMenu = InlineKeyboardMarkup(resize_keyboard = True)
 
