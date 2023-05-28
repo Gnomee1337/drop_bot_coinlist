@@ -32,14 +32,15 @@
                                 <?php
                                 include("inc/config.php");
                                 $statement = $db->prepare("SELECT `drop_manager_id` FROM drop_manager ORDER BY `drop_manager_id`");
-                                $drop_manager = $statement->execute();
+                                $statement->execute();
+                                $drop_manager = $statement->get_result();
 
                                 echo ('<select class="form-control" id="target_manager" name="target_manager" required="required">');
-                                echo ("<option selected='all'>ВСЕ МЕНЕДЖЕРЫ</option>");
+                                // echo ("<option selected='all'>ВСЕ МЕНЕДЖЕРЫ</option>");
                                 echo ("<option disabled selected>Выберите ID менеджера</option>");
 
                                 #Output drop id
-                                while ($manager_row = $drop_manager->fetchArray()) {
+                                while ($manager_row = $drop_manager->fetch_array()) {
                                     echo ("<option>" . $manager_row[0] . "</option>");
                                 }
                                 ?>

@@ -19,8 +19,9 @@
         <a class="nav-link text-primary" href="drop_users.php"><span class="fa fa-id-card"></span> Пользователи (<?php
           include("inc/config.php");
           $statement = $db->prepare("SELECT COUNT(`id_drop_accs`) FROM drop_accs");
-          $result2 = $statement->execute();
-          $row = $result2->fetchArray();
+          $statement->execute();
+          $result2 = $statement->get_result();
+          $row = $result2->fetch_array();
           echo $row[0];
           ?>)
         </a>
@@ -33,8 +34,9 @@
         <a class="nav-link text-primary" href="drop_managers.php"><span class="fa fa-eye"></span> Менеджеры (<?php
           include("inc/config.php");
           $statement = $db->prepare("SELECT COUNT(`drop_manager_id`) FROM drop_manager");
-          $result2 = $statement->execute();
-          $row = $result2->fetchArray();
+          $statement->execute();
+          $result2 = $statement->get_result();
+          $row = $result2->fetch_array();
           echo $row[0];
           ?>)
         </a>

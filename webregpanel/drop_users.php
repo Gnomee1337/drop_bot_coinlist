@@ -64,16 +64,18 @@ if (!isset($_SESSION['loggedin'])) {
                                             <?php
                                             include('inc/config.php');
                                             $statement = $db->prepare("SELECT `first_name`,`middle_name`,`surname`,`country`,`region`,`city`,`address`,`postcode`,`date_of_birth`,`document_id`,`phone_number`,`tg_username`,`referral_id`,`user_status`,`approve_date`,`payment_date`,`language`,`id_drop_accs` FROM drop_accs ORDER BY `id_drop_accs`");
-                                            $drop_accs = $statement->execute();
+                                            $statement->execute();
+                                            $drop_accs = $statement->get_result();
 
                                             $statement = $db->prepare("SELECT `drop_manager_id`,`dm_tg_id`,`dm_tg_username` FROM drop_manager");
-                                            $drop_managers = $statement->execute();
+                                            $statement->execute();
+                                            $drop_managers = $statement->get_result();
 
                                             #Output data
-                                            while ($users_verify_row = $drop_accs->fetchArray()) {
+                                            while ($users_verify_row = $drop_accs->fetch_array()) {
 
                                                 #Change referral_id to manager_nickname
-                                                while ($manager_row = $drop_managers->fetchArray()) {
+                                                while ($manager_row = $drop_managers->fetch_array()) {
                                                     if ($manager_row[1] == $users_verify_row[12])
                                                         $users_verify_row[12] = $manager_row[2];
                                                 }

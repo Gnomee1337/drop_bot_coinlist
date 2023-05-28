@@ -1,6 +1,6 @@
 <?php
 $status = session_status();
-if($status == PHP_SESSION_NONE){
+if ($status == PHP_SESSION_NONE) {
     //There is no active session
     session_start();
 }
@@ -22,8 +22,6 @@ if (!isset($_SESSION['loggedin'])) {
         if ($cmd == "cmd_verify_drop") {
             $target = $_POST['target_verify_drop'];
             $verify_status = preg_replace("~[\\/:*?'<>|]~", ' ', $_POST['verify_status_input']);
-            print($target);
-            print($verify_status);
             $statement = $db->prepare("UPDATE `drop_accs` SET `user_status` = '$verify_status' WHERE `id_drop_accs` = '$target'");
             $update_drops = $statement->execute();
         }
@@ -51,7 +49,7 @@ if (!isset($_SESSION['loggedin'])) {
             $drop_userstatus = preg_replace("~[\\/:*?'<>|]~", ' ', $_POST['add_drop_userstatus']);
             $drop_approvedate = preg_replace("~[\\/:*?'<>|]~", ' ', $_POST['add_drop_approvedate']);
             $drop_paymentdate = preg_replace("~[\\/:*?'<>|]~", ' ', $_POST['add_drop_paymentdate']);
-            
+
             // Add drop to table
             $statement = $db->prepare("INSERT INTO `drop_accs` (`tg_id`,`tg_username`,`first_name`,`middle_name`,`surname`,`country`,`region`,`city`,`address`,`postcode`,`date_of_birth`,`document_id`,`phone_number`,`referral_id`,`language`,`user_status`,`approve_date`,`payment_date`) VALUES ('$drop_tgid', '$drop_username', '$drop_firstname','$drop_middlename','$drop_surname','$drop_country','$drop_region','$drop_city','$drop_address','$drop_postcode','$drop_dateofbirth','$drop_documentid','$drop_phonenumber','$drop_referral','$drop_language','$drop_userstatus','$drop_approvedate','$drop_paymentdate')");
             $create_user = $statement->execute();
@@ -98,7 +96,7 @@ if (!isset($_SESSION['loggedin'])) {
                                                             `user_status` = CASE WHEN COALESCE('$drop_userstatus','') = '' THEN `user_status` ELSE '$drop_userstatus' END,
                                                             `approve_date` = CASE WHEN COALESCE('$drop_approvedate','') = '' THEN `approve_date` ELSE '$drop_approvedate' END,
                                                             `payment_date` = CASE WHEN COALESCE('$drop_paymentdate','') = '' THEN `payment_date` ELSE '$drop_paymentdate' END
-                                                          WHERE `id_drop_accs` = $target");
+                                                          WHERE `id_drop_accs` = '$target'");
             $edit_drop = $statement->execute();
             header('Location: ' . $url . 'drop_users.php');
         }
@@ -106,13 +104,13 @@ if (!isset($_SESSION['loggedin'])) {
         if ($cmd == "cmd_drop_delete") {
             $target = $_POST['target_drop'];
             #echo $target;
-            if ($target == 'ВСЕ ПОЛЬЗОВАТЕЛИ') {
-                $statement = $db->prepare("DELETE FROM drop_accs");
-                $delete_drops = $statement->execute();
-            } else {
-                $statement = $db->prepare("DELETE FROM drop_accs WHERE `id_drop_accs` = $target");
-                $delete_drops = $statement->execute();
-            }
+            // if ($target == 'ВСЕ ПОЛЬЗОВАТЕЛИ') {
+            //     $statement = $db->prepare("DELETE FROM drop_accs");
+            //     $delete_drops = $statement->execute();
+            // } else {
+            $statement = $db->prepare("DELETE FROM drop_accs WHERE `id_drop_accs` = '$target'");
+            $delete_drops = $statement->execute();
+            // }
             header('Location: ' . $url . 'drop_users.php');
         }
 
@@ -136,7 +134,7 @@ if (!isset($_SESSION['loggedin'])) {
             $manager_username = preg_replace("~[\\/:*?'<>|]~", ' ', $_POST['edit_drop_username']);
             $statement = $db->prepare("UPDATE `drop_accs` SET `dm_tg_id` = CASE WHEN COALESCE('$manager_tgid','') = '' THEN `dm_tg_id` ELSE '$manager_tgid' END,
                                                             `dm_tg_username` = CASE WHEN COALESCE('$manager_username','') = '' THEN `dm_tg_username` ELSE '$manager_username' END
-                                                      WHERE `drop_manager_id` = $target");
+                                                      WHERE `drop_manager_id` = '$target'");
             $edit_drop = $statement->execute();
             header('Location: ' . $url . 'drop_managers.php');
         }
@@ -144,13 +142,13 @@ if (!isset($_SESSION['loggedin'])) {
         if ($cmd == "cmd_manager_delete") {
             $target = $_POST['target_manager'];
             #echo $target;
-            if ($target == 'ВСЕ МЕНЕДЖЕРЫ') {
-                $statement = $db->prepare("DELETE FROM drop_manager");
-                $delete_managers = $statement->execute();
-            } else {
-                $statement = $db->prepare("DELETE FROM drop_manager WHERE `drop_manager_id` = $target");
-                $delete_managers = $statement->execute();
-            }
+            // if ($target == 'ВСЕ МЕНЕДЖЕРЫ') {
+            //     $statement = $db->prepare("DELETE FROM drop_manager");
+            //     $delete_managers = $statement->execute();
+            // } else {
+            $statement = $db->prepare("DELETE FROM drop_manager WHERE `drop_manager_id` = '$target'");
+            $delete_managers = $statement->execute();
+            // }
             header('Location: ' . $url . 'drop_managers.php');
         }
     } else {

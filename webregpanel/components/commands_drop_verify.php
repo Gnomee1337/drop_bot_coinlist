@@ -30,14 +30,15 @@
                                 <?php
                                 include("inc/config.php");
                                 $statement = $db->prepare("SELECT `id_drop_accs` FROM drop_accs WHERE `user_status` != 'new' ORDER BY `id_drop_accs`");
-                                $drop_accs = $statement->execute();
+                                $statement->execute();
+                                $drop_accs = $statement->get_result();
 
                                 echo ('<select class="form-control  " id="target_verify_drop" name="target_verify_drop" required="required">');
                                 echo ("<option disabled selected>Выберите пользователя</option>");
                                 // echo ("<option selected='all'>ВСЕМ ПОЛЬЗОВАТЕЛЯМ</option>");
                                 
                                 #Output users
-                                while ($droprow = $drop_accs->fetchArray()) {
+                                while ($droprow = $drop_accs->fetch_array()) {
                                     echo ("<option>" . $droprow[0] . "</option>");
                                 }
                                 ?>

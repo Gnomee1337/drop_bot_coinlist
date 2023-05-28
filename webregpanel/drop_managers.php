@@ -50,10 +50,11 @@ if (!isset($_SESSION['loggedin'])) {
                                             <?php
                                             include('inc/config.php');
                                             $statement = $db->prepare("SELECT `dm_tg_username`,`dm_tg_id`,`drop_manager_id` FROM drop_manager ORDER BY `drop_manager_id`");
-                                            $drop_managers = $statement->execute();
+                                            $statement->execute();
+                                            $drop_managers = $statement->get_result();
 
                                             #Output data
-                                            while ($managers_row = $drop_managers->fetchArray()) {
+                                            while ($managers_row = $drop_managers->fetch_array()) {
 
                                                 // #Change referral_id to manager_nickname
                                                 // while ($manager_row = $drop_managers->fetchArray()) {
@@ -62,12 +63,14 @@ if (!isset($_SESSION['loggedin'])) {
                                                 // }
 
                                                 $statement = $db->prepare("SELECT COUNT(`referral_id`) FROM drop_accs WHERE `referral_id` = '$managers_row[1]'");
-                                                $invited_count = $statement->execute();
-                                                $invited_count = $invited_count->fetchArray();
+                                                $statement->execute();
+                                                $invited_count = $statement->get_result();
+                                                $invited_count = $invited_count->fetch_array();
                                                 
                                                 $statement = $db->prepare("SELECT COUNT(`referral_id`) FROM drop_accs WHERE `user_status` = 'approved' AND  `referral_id` = '$managers_row[1]'");
-                                                $approved_count = $statement->execute();
-                                                $approved_count = $approved_count->fetchArray();
+                                                $statement->execute();
+                                                $approved_count = $statement->get_result();
+                                                $approved_count = $approved_count->fetch_array();
 
                                                 #Output in table
                                                 echo

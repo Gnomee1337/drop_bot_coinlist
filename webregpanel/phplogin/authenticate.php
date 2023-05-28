@@ -9,9 +9,10 @@ if (!isset($_POST['username'], $_POST['password'])) {
 } else {
     $username = $_POST['username'];
     $statement = $db->prepare("SELECT `id_wp_accs`,`password_wp_accs` FROM webpanel_accounts WHERE `username_wp_accs` = '$username'");
-    $result = $statement->execute();
+    $statement->execute();
+    $result = $statement->get_result();
 
-    while ($accounts = $result->fetchArray())
+    while ($accounts = $result->fetch_array())
         if (!empty($accounts)) {
             $id = $accounts[0];
             $password = $accounts[1];
