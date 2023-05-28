@@ -109,10 +109,14 @@ class Database:
             else:
                 return 1
             
-    def get_manager_invites(self, user_id, user_status="new"):
+    def get_manager_invites(self, user_id, user_status):
         with self.connection:
-            sql = "SELECT COUNT(`referral_id`) FROM `drop_accs` WHERE `referral_id` = ? AND `user_status` = ?"
-            result = self.cursor.execute(sql, (user_id, user_status,)).fetchone()
+            if(user_status != ""):
+                sql = "SELECT COUNT(`referral_id`) FROM `drop_accs` WHERE `referral_id` = ? AND `user_status` = ?"
+                result = self.cursor.execute(sql, (user_id, user_status,)).fetchone()
+            else:
+                sql = "SELECT COUNT(`referral_id`) FROM `drop_accs` WHERE `referral_id` = ?"
+                result = self.cursor.execute(sql, (user_id,)).fetchone()
             # result = self.cursor.fetchone()
             if (result is None):
                 return 0
@@ -130,3 +134,12 @@ class Database:
             else:
                 return result
 
+    def update_manager_invites(self, user_id, invited_users):
+        with self.connection:
+            sql = "UPDATE drop_manager SET `invited_users` = ? WHERE `dm_tg_id` = ?"
+            result = self.cursor.execute(sql, (invited_users, user_id, )).fetchone()
+            # result = self.cursor.fetchone()
+            if (result is None):
+                return 0
+            else:
+                return result[0]
