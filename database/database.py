@@ -187,17 +187,27 @@ class Database:
         else:
             return 1
 
-    def get_manager_invites(self, user_id, user_status="new"):
+    def get_manager_invites(self, user_id, user_status):
         self.__connect__()
-        sql = "SELECT COUNT(`referral_id`) FROM drop_accs WHERE `referral_id` = %s AND `user_status` = %s"
-        self.cursor.execute(
-            sql,
-            (
-                user_id,
-                user_status,
-            ),
-        )
-        result = self.cursor.fetchone()
+        if(user_status != ""):
+            sql = "SELECT COUNT(`referral_id`) FROM drop_accs WHERE `referral_id` = %s AND `user_status` = %s"
+            self.cursor.execute(
+                sql,
+                (
+                    user_id,
+                    user_status,
+                ),
+            )
+            result = self.cursor.fetchone()
+        else:
+            sql = "SELECT COUNT(`referral_id`) FROM drop_accs WHERE `referral_id` = %s"
+            self.cursor.execute(
+                sql,
+                (
+                    user_id,
+                ),
+            )
+            result = self.cursor.fetchone()
         self.__disconnect__()
         if result is None:
             return 0
@@ -214,3 +224,14 @@ class Database:
             return None
         else:
             return result
+        
+    def update_manager_invites(self, user_id, invited_users):
+        self.__connect__()
+        sql = "UPDATE drop_manager SET `invited_users` = %s WHERE `dm_tg_id` = %s"
+        self.cursor.execute(sql, (invited_users, user_id, ))
+        self.connection.commit()
+        result = self.cursor.fetchone()
+        if (result is None):
+            return 0
+        else:
+            return result[0]

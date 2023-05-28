@@ -61,6 +61,8 @@ async def cm_start(message: types.Message, state: FSMContext):
         drop_manager_id = db.get_user_referral(message.from_user.id)
         if(drop_manager_id != 0):
             manager_language = db.get_user_language(drop_manager_id)
+            new_invited_users = db.get_manager_invites(drop_manager_id, "")
+            db.update_manager_invites(drop_manager_id, new_invited_users)
             await bot.send_message(drop_manager_id, "@" + message.from_user.username + set_localization(" перешел по вашей реферальной ссылке в бота!",manager_language))
         ## Send user to language panel
         await message.answer('Привет. Выберите язык использования!\nHello. Choose your language!', parse_mode="html", reply_markup=nav.langMenu)
