@@ -5,27 +5,45 @@ from localization.localization import set_localization
 #Language
 langRU = InlineKeyboardButton(text='🇷🇺 Русский', callback_data='lang_ru')
 langEN = InlineKeyboardButton(text='🇺🇸 English', callback_data='lang_en')
-
 #LanguageMenu
 langMenu = InlineKeyboardMarkup(resize_keyboard = True)
 langMenu.add(langRU, langEN)
 
-def mainMenu(lang='en'):
+def mainMenu(lang='ru'):
     mainMenu = InlineKeyboardMarkup(resize_keyboard = True)
     
-    btnFAQ = InlineKeyboardButton(set_localization("FAQ", lang),callback_data='FAQ')
-    btnAbout = InlineKeyboardButton(set_localization("About", lang),callback_data='coinlistinfo')
-    btnRegistration = InlineKeyboardButton(set_localization("Registration", lang), callback_data='reg')
+    btnFAQ = InlineKeyboardButton(set_localization("Информация", lang),callback_data='FAQ')
+    #btnAbout = InlineKeyboardButton(set_localization("About", lang),callback_data='coinlistinfo')
+    btnRegistration = InlineKeyboardButton(set_localization("Регистрация", lang), callback_data='reg')
     
-    mainMenu.add(btnFAQ, btnAbout, btnRegistration)
+    mainMenu.add(btnFAQ, btnRegistration)
 
     return mainMenu
 
-def adminMenu(lang='ru'):
-    adminMenu = ReplyKeyboardMarkup(resize_keyboard = True)
+def documentMenu(lang='ru'):
+    documentMenu = InlineKeyboardMarkup(resize_keyboard = True, row_width=1)
 
-    btnShowUsers = KeyboardButton("Показать Пользователей")
+    btnPassport = InlineKeyboardButton(set_localization("Паспорт", lang),callback_data='passportid')
+    btnDriver = InlineKeyboardButton(set_localization("Водительское Удостоверение", lang),callback_data='driverid')
+    btnIdentif = InlineKeyboardButton(set_localization("ID-Карта", lang),callback_data='identifnumberid')
+    
+    documentMenu.add(btnPassport, btnDriver, btnIdentif)
+    return documentMenu
 
-    adminMenu.add(btnShowUsers)
+def submitMenu(lang='ru'):
+    submitMenu = InlineKeyboardMarkup(resize_keyboard = True)
+    
+    btnSend = InlineKeyboardButton(set_localization("Отправить", lang),callback_data='submitdata')
+    btnDecline = InlineKeyboardButton(set_localization("Отменить", lang),callback_data='declinedata')
 
-    return adminMenu
+    submitMenu.add(btnSend, btnDecline)
+    return submitMenu
+
+def managerMenu(lang='ru'):
+    managerMenu = InlineKeyboardMarkup(resize_keyboard = True)
+
+    btnShowStats = InlineKeyboardButton(set_localization("Моя статистика", lang),callback_data='managerstats')
+
+    managerMenu.add(btnShowStats)
+
+    return managerMenu
