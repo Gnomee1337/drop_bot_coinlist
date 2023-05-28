@@ -292,19 +292,25 @@ async def input_date_of_birth(message: types.Message, state: FSMContext):
 
 @dp.callback_query_handler(state=RegStates.document_type)
 async def input_document_type(call: types.CallbackQuery, state: FSMContext):
-    user_language = db.get_user_language(call.message.from_user.id)
     # if (not isEnglish(callmessage.text.lower())):
     #     await message.answer(set_localization(
     #     "Пожалуйста, укажите данные на английском языке и латинскими буквами ", user_language)+random.choice(config.bad_reaction))
     #     return
-    if(call.data == "passportid"):
-        await state.update_data(document_type = "Passport | ")
-    elif(call.data == "driverid"):
-        await state.update_data(document_type = "DriverID | ")
-    elif(call.data == "identifnumberid"):
-        await state.update_data(document_type = "IdentificationID | ")
-    await RegStates.document_id.set()
-    await call.message.answer(set_localization("Укажите номер вашего документа", user_language))
+    try:
+        if(call.data == "passportid"):
+            await state.update_data(document_type = "Passport | ")
+        elif(call.data == "driverid"):
+            await state.update_data(document_type = "DriverID | ")
+        elif(call.data == "identifnumberid"):
+            await state.update_data(document_type = "IdentID | ")
+        else:
+            return
+        if(call.message != None):
+            user_language = db.get_user_language(call.message.from_user.id)
+            await RegStates.document_id.set()
+            await call.message.answer(set_localization("Укажите номер вашего документа", user_language))
+    except:
+        pass
 
 async def input_document_id(message: types.Message, state: FSMContext):
     user_language = db.get_user_language(message.from_user.id)
@@ -324,13 +330,17 @@ async def input_phonenumber(message: types.Message, state: FSMContext):
         await clear_chat(message.message_id, message.chat.id)
         return
     if 11 >= len(str(message.text)) >= 13:
-        await message.answer(set_localization("Некорректный номер телефона, возможно вы ошиблись",user_language)+ random.choice(config.incorrect_reaction))
+        await message.answer(set_localization("Некорректный номер телефона, возможно вы ошиблись ",user_language)+ random.choice(config.incorrect_reaction))
         return
     for _ in str(message.text):
         if _ not in ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+']:
             await message.answer(set_localization(
                 "Некорректный номер телефона, возможно вы ошиблись ",user_language)+random.choice(config.incorrect_reaction))
             return
+    if(str(message.text[0]) != '+'):
+        await message.answer(set_localization(
+                "Пожалуйста укажите + в начале номера ",user_language)+random.choice(config.incorrect_reaction))
+        return
     await state.update_data(phone_number=message.text)
     await RegStates.submitdata.set()
     await message.answer(set_localization("Вы уверены, что указали данные верни?",user_language), reply_markup=nav.submitMenu(user_language))
@@ -364,8 +374,10 @@ async def input_phonenumber(message: types.Message, state: FSMContext):
                 ## Notify top manager for new filled user
                 top_managers = db.get_top_managers()
                 try:
-                    for manager in top_managers[0]:
+                    for manager_tup in top_managers:
+                        manager = manager_tup[0]
                         manager_language = db.get_user_language(manager)
+                        print(manager_language)
                         await bot.send_message(manager, 
                                                "@" + data['tg_username'] + "<b>"+set_localization(" заполнил свои данные и ждет прохождения верификации!", manager_language) + "</b>" +
                                                "\nСтрана: " + str(data['country']) +
