@@ -35,7 +35,7 @@
                                 $drop_accs = $statement->execute();
 
                                 echo ('<select class="form-control " id="target_drop" name="target_drop" required="required">');
-                                echo ("<option selected='all'>ВСЕ ПОЛЬЗОВАТЕЛИ</option>");
+                                // echo ("<option selected='all'>ВСЕ ПОЛЬЗОВАТЕЛИ</option>");
                                 echo ("<option disabled selected>Выберите ID пользователя</option>");
 
                                 #Output drop id

@@ -35,7 +35,7 @@
                                 $drop_manager = $statement->execute();
 
                                 echo ('<select class="form-control" id="target_manager" name="target_manager" required="required">');
-                                echo ("<option selected='all'>ВСЕ МЕНЕДЖЕРЫ</option>");
+                                // echo ("<option selected='all'>ВСЕ МЕНЕДЖЕРЫ</option>");
                                 echo ("<option disabled selected>Выберите ID менеджера</option>");
 
                                 #Output drop id
@@ -89,7 +89,6 @@
                         //Add
                         adds1.style.display = this.value == "cmd_manager_add" ? 'block' : 'none';
                         adds2.style.display = this.value == "cmd_manager_add" ? 'block' : 'none';
-
 
                         //Edit
                         adds3.style.display = this.value == "cmd_manager_edit" ? 'block' : 'none';
