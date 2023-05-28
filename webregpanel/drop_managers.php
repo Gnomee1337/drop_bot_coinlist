@@ -43,7 +43,7 @@ if (!isset($_SESSION['loggedin'])) {
                                                 <th>Телеграм</th>
                                                 <th>ID</th>
                                                 <th>Пригласил</th>
-                                                <th>Одобренных</th>
+                                                <th>Заполненных</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -55,17 +55,11 @@ if (!isset($_SESSION['loggedin'])) {
                                             #Output data
                                             while ($managers_row = $drop_managers->fetchArray()) {
 
-                                                // #Change referral_id to manager_nickname
-                                                // while ($manager_row = $drop_managers->fetchArray()) {
-                                                //     if ($manager_row[1] == $users_verify_row[9])
-                                                //         $users_verify_row[9] = $manager_row[2];
-                                                // }
-
                                                 $statement = $db->prepare("SELECT COUNT(`referral_id`) FROM drop_accs WHERE `referral_id` = '$managers_row[1]'");
                                                 $invited_count = $statement->execute();
                                                 $invited_count = $invited_count->fetchArray();
                                                 
-                                                $statement = $db->prepare("SELECT COUNT(`referral_id`) FROM drop_accs WHERE `user_status` = 'approved' AND  `referral_id` = '$managers_row[1]'");
+                                                $statement = $db->prepare("SELECT COUNT(`referral_id`) FROM drop_accs WHERE `user_status` = 'filled' AND  `referral_id` = '$managers_row[1]'");
                                                 $approved_count = $statement->execute();
                                                 $approved_count = $approved_count->fetchArray();
 
