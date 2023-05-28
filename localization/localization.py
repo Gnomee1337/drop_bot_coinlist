@@ -30,6 +30,7 @@ localization = {
         "Извините, но вы уже указывали данный номер телефона " : "Sorry, but you have already sumbitted this phone number",
         "Некорректный номер телефона, возможно вы ошиблись " : "Incorrect phone number, you may be mistaken",
         "Пожалуйста укажите + в начале номера " : "Please enter + at the beginning of the number ",
+        "Вы уверены, что указали данные верно?" : "Are you sure that you entered the data correctly?",
         "Поздравляю, информация сохранена!":"Congratulations, the information is saved!",
         "Скоро с вами свяжется менеджер для прохождения верификации и выплаты 💰":"A manager will contact you soon for verification and payment 💰",
 
