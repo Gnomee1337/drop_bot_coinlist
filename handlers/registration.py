@@ -343,7 +343,7 @@ async def input_phonenumber(message: types.Message, state: FSMContext):
         return
     await state.update_data(phone_number=message.text)
     await RegStates.submitdata.set()
-    await message.answer(set_localization("Вы уверены, что указали данные верни?",user_language), reply_markup=nav.submitMenu(user_language))
+    await message.answer(set_localization("Вы уверены, что указали данные верно?",user_language), reply_markup=nav.submitMenu(user_language))
 
     @dp.callback_query_handler(state=RegStates.submitdata)
     async def submit_data(call: types.CallbackQuery, state: FSMContext):
