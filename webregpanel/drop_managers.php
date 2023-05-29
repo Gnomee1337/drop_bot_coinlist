@@ -1,6 +1,6 @@
 <?php
 $status = session_status();
-if($status == PHP_SESSION_NONE){
+if ($status == PHP_SESSION_NONE) {
     //There is no active session
     session_start();
 }
@@ -36,8 +36,7 @@ if (!isset($_SESSION['loggedin'])) {
                         <div class="card-body ">
                             <div class="container text-center bg-sondary ">
                                 <div class="table-center pt-4 pb-4">
-                                    <table class="table table-bordered" id="dataTable" width="100%"
-                                        cellspacing="0">
+                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
                                                 <th>Телеграм</th>
@@ -61,12 +60,12 @@ if (!isset($_SESSION['loggedin'])) {
                                                 //     if ($manager_row[1] == $users_verify_row[9])
                                                 //         $users_verify_row[9] = $manager_row[2];
                                                 // }
-
+                                        
                                                 $statement = $db->prepare("SELECT COUNT(`referral_id`) FROM drop_accs WHERE `referral_id` = '$managers_row[1]'");
                                                 $statement->execute();
                                                 $invited_count = $statement->get_result();
                                                 $invited_count = $invited_count->fetch_array();
-                                                
+
                                                 $statement = $db->prepare("SELECT COUNT(`referral_id`) FROM drop_accs WHERE `user_status` = 'approved' AND  `referral_id` = '$managers_row[1]'");
                                                 $statement->execute();
                                                 $approved_count = $statement->get_result();

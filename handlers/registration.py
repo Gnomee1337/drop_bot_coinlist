@@ -373,11 +373,14 @@ async def input_phonenumber(message: types.Message, state: FSMContext):
                 ## Notify drop manager about filled user
                 drop_manager_id = db.get_user_referral(data['tg_id'])
                 if(drop_manager_id != 0):
-                    manager_language = db.get_user_language(drop_manager_id)
-                    await bot.send_message(drop_manager_id, "@" + data['tg_username'] + set_localization(" заполнил свои данные и ждет прохождения верификации!", manager_language))
+                    try:
+                        manager_language = db.get_user_language(drop_manager_id)
+                        await bot.send_message(drop_manager_id, "@" + data['tg_username'] + set_localization(" заполнил свои данные и ждет прохождения верификации!", manager_language))
+                    except:
+                        pass
                 ## Notify top manager for new filled user
-                top_managers = db.get_top_managers()
                 try:
+                    top_managers = db.get_top_managers()
                     for manager_tup in top_managers:
                         manager = manager_tup[0]
                         manager_language = db.get_user_language(manager)
