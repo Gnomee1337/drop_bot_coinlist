@@ -132,7 +132,7 @@ if (!isset($_SESSION['loggedin'])) {
             $target = $_POST['target_manager'];
             $manager_tgid = preg_replace("~[\\/:*?'<>|]~", ' ', $_POST['edit_drop_tgid']);
             $manager_username = preg_replace("~[\\/:*?'<>|]~", ' ', $_POST['edit_drop_username']);
-            $statement = $db->prepare("UPDATE `drop_accs` SET `dm_tg_id` = CASE WHEN COALESCE('$manager_tgid','') = '' THEN `dm_tg_id` ELSE '$manager_tgid' END,
+            $statement = $db->prepare("UPDATE drop_accs SET `dm_tg_id` = CASE WHEN COALESCE('$manager_tgid','') = '' THEN `dm_tg_id` ELSE '$manager_tgid' END,
                                                             `dm_tg_username` = CASE WHEN COALESCE('$manager_username','') = '' THEN `dm_tg_username` ELSE '$manager_username' END
                                                       WHERE `drop_manager_id` = '$target'");
             $edit_drop = $statement->execute();
