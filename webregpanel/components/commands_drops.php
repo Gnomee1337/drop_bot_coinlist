@@ -32,14 +32,15 @@
                                 <?php
                                 include("inc/config.php");
                                 $statement = $db->prepare("SELECT `id_drop_accs` FROM drop_accs ORDER BY `id_drop_accs`");
-                                $drop_accs = $statement->execute();
+                                $statement->execute();
+                                $drop_accs = $statement->get_result();
 
                                 echo ('<select class="form-control " id="target_drop" name="target_drop" required="required">');
                                 // echo ("<option selected='all'>ВСЕ ПОЛЬЗОВАТЕЛИ</option>");
                                 echo ("<option disabled selected>Выберите ID пользователя</option>");
 
                                 #Output drop id
-                                while ($droprow = $drop_accs->fetchArray()) {
+                                while ($droprow = $drop_accs->fetch_array()) {
                                     echo ("<option>" . $droprow[0] . "</option>");
                                 }
                                 ?>

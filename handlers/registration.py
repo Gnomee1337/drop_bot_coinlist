@@ -53,11 +53,13 @@ async def cm_start(message: types.Message, state: FSMContext):
         ## Get referral id
         args = message.get_args()
         reference = decode_payload(args)
+        if(reference == ""):
+            reference = 0
         ## Init user to DB
         db.add_user_empty(message.from_user.id, message.from_user.username, reference ,"new")
         ## Notify drop manager
         drop_manager_id = db.get_user_referral(message.from_user.id)
-        if(drop_manager_id != ""):
+        if(drop_manager_id != 0):
             manager_language = db.get_user_language(drop_manager_id)
             new_invited_users = db.get_manager_invites(drop_manager_id, "")
             db.update_manager_invites(drop_manager_id, new_invited_users)
@@ -370,16 +372,18 @@ async def input_phonenumber(message: types.Message, state: FSMContext):
                 logging.debug("DB user data update in table!")
                 ## Notify drop manager about filled user
                 drop_manager_id = db.get_user_referral(data['tg_id'])
-                if(drop_manager_id != ""):
-                    manager_language = db.get_user_language(drop_manager_id)
-                    await bot.send_message(drop_manager_id, "@" + data['tg_username'] + set_localization(" заполнил свои данные и ждет прохождения верификации!", manager_language))
+                if(drop_manager_id != 0):
+                    try:
+                        manager_language = db.get_user_language(drop_manager_id)
+                        await bot.send_message(drop_manager_id, "@" + data['tg_username'] + set_localization(" заполнил свои данные и ждет прохождения верификации!", manager_language))
+                    except:
+                        pass
                 ## Notify top manager for new filled user
-                top_managers = db.get_top_managers()
                 try:
+                    top_managers = db.get_top_managers()
                     for manager_tup in top_managers:
                         manager = manager_tup[0]
                         manager_language = db.get_user_language(manager)
-                        print(manager_language)
                         await bot.send_message(manager, 
                                                "@" + data['tg_username'] + "<b>"+set_localization(" заполнил свои данные и ждет прохождения верификации!", manager_language) + "</b>" +
                                                "\nСтрана: " + str(data['country']) +

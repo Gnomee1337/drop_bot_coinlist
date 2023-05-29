@@ -10,4 +10,5 @@ from config import TOKEN
 
 bot = Bot(TOKEN)
 dp = Dispatcher(bot, storage=MemoryStorage())
-db = Database('database/reg_bot.db')
+
+db = Database()

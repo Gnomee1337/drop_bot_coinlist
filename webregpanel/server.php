@@ -22,8 +22,6 @@ if (!isset($_SESSION['loggedin'])) {
         if ($cmd == "cmd_verify_drop") {
             $target = $_POST['target_verify_drop'];
             $verify_status = preg_replace("~[\\/:*?'<>|]~", ' ', $_POST['verify_status_input']);
-            print($target);
-            print($verify_status);
             $statement = $db->prepare("UPDATE `drop_accs` SET `user_status` = '$verify_status' WHERE `id_drop_accs` = '$target'");
             $update_drops = $statement->execute();
         }
