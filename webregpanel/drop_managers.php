@@ -42,7 +42,7 @@ if (!isset($_SESSION['loggedin'])) {
                                                 <th>Телеграм</th>
                                                 <th>ID</th>
                                                 <th>Пригласил</th>
-                                                <th>Одобренных</th>
+                                                <th>Заполненных</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -54,7 +54,7 @@ if (!isset($_SESSION['loggedin'])) {
 
                                             #Output data
                                             while ($managers_row = $drop_managers->fetch_array()) {
-
+                                              
                                                 // #Change referral_id to manager_nickname
                                                 // while ($manager_row = $drop_managers->fetchArray()) {
                                                 //     if ($manager_row[1] == $users_verify_row[9])

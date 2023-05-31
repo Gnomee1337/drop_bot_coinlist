@@ -91,7 +91,6 @@
                         adds1.style.display = this.value == "cmd_manager_add" ? 'block' : 'none';
                         adds2.style.display = this.value == "cmd_manager_add" ? 'block' : 'none';
 
-
                         //Edit
                         adds3.style.display = this.value == "cmd_manager_edit" ? 'block' : 'none';
                         adds4.style.display = this.value == "cmd_manager_edit" ? 'block' : 'none';
