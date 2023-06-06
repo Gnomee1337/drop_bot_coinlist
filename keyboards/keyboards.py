@@ -23,7 +23,7 @@ def mainMenu(lang='ru'):
 def documentMenu(lang='ru'):
     documentMenu = InlineKeyboardMarkup(resize_keyboard = True, row_width=1)
 
-    btnPassport = InlineKeyboardButton(set_localization("Паспорт", lang),callback_data='passportid')
+    btnPassport = InlineKeyboardButton(set_localization("Загран Паспорт", lang),callback_data='passportid')
     btnDriver = InlineKeyboardButton(set_localization("Водительское Удостоверение", lang),callback_data='driverid')
     btnIdentif = InlineKeyboardButton(set_localization("ID-Карта", lang),callback_data='identifnumberid')
     
@@ -36,7 +36,7 @@ def submitMenu(lang='ru'):
     btnSend = InlineKeyboardButton(set_localization("Отправить", lang),callback_data='submitdata')
     btnDecline = InlineKeyboardButton(set_localization("Отменить", lang),callback_data='declinedata')
 
-    submitMenu.add(btnSend, btnDecline)
+    submitMenu.add(btnDecline, btnSend)
     return submitMenu
 
 def managerMenu(lang='ru'):
