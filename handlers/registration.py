@@ -1,6 +1,6 @@
 ## Based on https://github.com/SoDeepASMR/CoinListBot
 
-import random, string
+import random, string, os
 from aiogram import executor, types
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import Text
@@ -138,7 +138,7 @@ async def main_menu(call: types.CallbackQuery, state: FSMContext):
                 await state.set_state(None)
                 return
             else:
-                await call.message.answer(set_localization("Введите, пожалуйста, свою страну",user_language))
+                await call.message.answer(set_localization("Введите свою страну на английском языке.\n(Пример: Ukraine)",user_language))
                 await RegStates.country.set()
                 await clear_chat(call.message.message_id, call.message.chat.id)
         if call.data == 'FAQ':
@@ -174,7 +174,7 @@ async def input_country(message: types.Message, state: FSMContext):
         ## Save country to state data
         await state.update_data(country=message.text.lower())
         await RegStates.region.set()
-        await message.answer(set_localization("Введите название вашей области",user_language))
+        await message.answer(set_localization("Введите название вашей области на английском языке.\n(Пример: Kyivska Oblast)",user_language))
     ## Country not from expected list
     else:
         await message.answer(set_localization(
@@ -195,7 +195,7 @@ async def input_region(message: types.Message, state: FSMContext):
         ## Save region to state data
         await state.update_data(region=message.text.lower())
         await RegStates.city.set()
-        await message.answer(set_localization('Введите название города',user_language))
+        await message.answer(set_localization("Введите название города на английском языке.\n(Пример: Kyiv)",user_language))
 
 async def input_city(message: types.Message, state: FSMContext):
     user_language = db.get_user_language(message.from_user.id)
@@ -206,7 +206,7 @@ async def input_city(message: types.Message, state: FSMContext):
     ## Save city to state data
     await state.update_data(city=message.text.lower())
     await RegStates.firstname.set()
-    await message.answer(set_localization('Введите ваше Имя',user_language))
+    await message.answer(set_localization("Введите ваше Имя на английском языке, как указано в вашем документе.\n(Пример: Oleksandr)",user_language))
 
 # async def input_fullname(message: types.Message, state: FSMContext):
 #     user_language = db.get_user_language(message.from_user.id)
@@ -232,7 +232,7 @@ async def input_firstname(message: types.Message, state: FSMContext):
             return
     await state.update_data(first_name=message.text)
     await RegStates.middlename.set()
-    await message.answer(set_localization("Введите ваше Отчество",user_language))
+    await message.answer(set_localization("Введите ваше Отчество на английском языке, как указано в вашем документе.\n(Пример: Oleksandrovych)",user_language))
 
 async def input_middlename(message: types.Message, state: FSMContext):
     user_language = db.get_user_language(message.from_user.id)
@@ -247,7 +247,7 @@ async def input_middlename(message: types.Message, state: FSMContext):
             return
     await state.update_data(middle_name=message.text)
     await RegStates.surname.set()
-    await message.answer(set_localization("Введите вашу Фамилию",user_language))
+    await message.answer(set_localization("Введите вашу Фамилию на английском языке, как указано в вашем документе.\n(Пример: Boiko)",user_language))
 
 async def input_surname(message: types.Message, state: FSMContext):
     user_language = db.get_user_language(message.from_user.id)
@@ -262,7 +262,7 @@ async def input_surname(message: types.Message, state: FSMContext):
             return
     await state.update_data(surname=message.text)
     await RegStates.address.set()
-    await message.answer(set_localization("Введите ваш Адрес проживания",user_language))
+    await message.answer(set_localization("Введите ваш Адрес проживания, на английском языке, как указано в вашем документе.\n(Пример: St Khreshchatyk 10)",user_language))
 
 async def input_address(message: types.Message, state: FSMContext):
     user_language = db.get_user_language(message.from_user.id)
@@ -272,7 +272,7 @@ async def input_address(message: types.Message, state: FSMContext):
         return
     await state.update_data(address=str(message.text))
     await RegStates.postcode.set()
-    await message.answer(set_localization("Укажите ваш Почтовый Индекс (Postcode)",user_language))
+    await message.answer(set_localization("Укажите ваш Почтовый Индекс (Postcode).\nЕсли вы не знаете ваш почтовый индекс, то найдите его в интернете.\n(Пример: 03148)",user_language),parse_mode="html")
 
 async def input_postcode(message: types.Message, state: FSMContext):
     user_language = db.get_user_language(message.from_user.id)
@@ -282,7 +282,7 @@ async def input_postcode(message: types.Message, state: FSMContext):
         return
     await state.update_data(postcode=str(message.text))
     await RegStates.date_of_birth.set()
-    await message.answer(set_localization("Укажите свою Дату Рождения в формате День-Месяц-Год (05-04-1980)",user_language))
+    await message.answer(set_localization("Укажите свою Дату Рождения в формате День-Месяц-Год\n(Пример: 05-04-1980)",user_language))
  
 async def input_date_of_birth(message: types.Message, state: FSMContext):
     user_language = db.get_user_language(message.from_user.id)
@@ -292,7 +292,7 @@ async def input_date_of_birth(message: types.Message, state: FSMContext):
         return
     await state.update_data(date_of_birth=str(message.text))
     await RegStates.document_type.set()
-    await message.answer(set_localization("Выберите тип вашего документа",user_language), reply_markup=nav.documentMenu(user_language))
+    await message.answer(set_localization("Выберите тип вашего документа.\nНажмите на тип документа снизу:",user_language), reply_markup=nav.documentMenu(user_language))
 
 @dp.callback_query_handler(state=RegStates.document_type)
 async def input_document_type(call: types.CallbackQuery, state: FSMContext):
@@ -302,17 +302,27 @@ async def input_document_type(call: types.CallbackQuery, state: FSMContext):
     #     return
     try:
         if(call.data == "passportid"):
-            await state.update_data(document_type = "Passport | ")
+            await state.update_data(document_type = "F.Passport | ")
         elif(call.data == "driverid"):
-            await state.update_data(document_type = "DriverID | ")
+            await state.update_data(document_type = "Driver-ID | ")
         elif(call.data == "identifnumberid"):
-            await state.update_data(document_type = "IdentID | ")
+            await state.update_data(document_type = "ID-Card | ")
         else:
             return
         if(call.message != None):
             user_language = db.get_user_language(call.message.from_user.id)
             await RegStates.document_id.set()
-            await call.message.answer(set_localization("Укажите номер вашего документа", user_language))
+            try:
+                fpassphotopath = os.path.join( os.path.dirname(__file__), "..", "images_for_users", "zagran-pass-example.jpg" )
+                fpassphoto = open(fpassphotopath, "rb")
+                await call.message.answer_photo(fpassphoto, 
+                                                caption=set_localization("Укажите номер вашего документа, как указано в вашем документе.\n(Пример: На изображении загранпаспорта Номер Документа выделен зеленым цветом)", user_language),
+                                                parse_mode="html")
+            except:
+                logging.error("Error occurred while sending fpass photo")
+                await call.message.answer(set_localization("Укажите номер вашего документа, как указано в вашем документе", user_language))
+                pass
+            #await call.message.answer(set_localization("Укажите номер вашего документа", user_language))
     except:
         pass
 
@@ -324,7 +334,7 @@ async def input_document_id(message: types.Message, state: FSMContext):
         return
     await state.update_data(document_id = str(message.text))
     await RegStates.phonenumber.set()
-    await message.answer(set_localization("Укажите полный номер вашего Мобильного Телефона (с кодом страны)",user_language))
+    await message.answer(set_localization("Укажите полный номер вашего Мобильного Телефона (с кодом страны).\n(Пример: +380637775511 или +48225559999)",user_language))
 
 async def input_phonenumber(message: types.Message, state: FSMContext):
     user_language = db.get_user_language(message.from_user.id)
@@ -347,7 +357,28 @@ async def input_phonenumber(message: types.Message, state: FSMContext):
         return
     await state.update_data(phone_number=message.text)
     await RegStates.submitdata.set()
-    await message.answer(set_localization("Вы уверены, что указали данные верно?",user_language), reply_markup=nav.submitMenu(user_language))
+    try:
+        data = await state.get_data()
+        await message.answer("<b>" + set_localization("Вы уверены, что указали данные верно?\nПроверьте пожалуйста!\n",user_language) + "</b>"
+                             + "\n"
+                             + "Страна: " + str(data['country']) + "\n"
+                             + "Область: " + str(data['region']) + "\n"
+                             + "Город: " + str(data['city']) + "\n"
+                             + "Имя: " + str(data['first_name']) + "\n"
+                             + "Отчество: " + str(data['middle_name']) + "\n"
+                             + "Фамилия: " + str(data['surname']) + "\n"
+                             + "Адрес: " + str(data['address']) + "\n"
+                             + "Почтовый Индекс: " + str(data['postcode']) + "\n"
+                             + "Дата Рождения: " + str(data['date_of_birth']) + "\n"
+                             + "Номер документа: " + str(data['document_id']) + "\n"
+                             + "Номер телефона: " + str(data['phone_number']),
+                             parse_mode="html",
+                             reply_markup=nav.submitMenu(user_language))
+    except:
+        await message.answer(set_localization("Вы уверены, что указали данные верно?\nПроверьте пожалуйста:",user_language), parse_mode="html", reply_markup=nav.submitMenu(user_language))
+        logging.error("Error occurred while showing user information BEFORE submit")
+        pass
+
 
     @dp.callback_query_handler(state=RegStates.submitdata)
     async def submit_data(call: types.CallbackQuery, state: FSMContext):
@@ -399,6 +430,7 @@ async def input_phonenumber(message: types.Message, state: FSMContext):
                                                "\nТелефон: " + str(data['phone_number'])
                                                , parse_mode="html")
                 except:
+                    logging.error("Error occurred while sending User Info to Top-Manager")
                     pass
                 await state.finish()
                 await message.answer('🎉')
