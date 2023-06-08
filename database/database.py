@@ -187,9 +187,20 @@ class Database:
         else:
             return 1
 
-    def get_manager_invites(self, user_id, user_status):
+    def get_manager_invites(self, user_id, user_status = "", paid_status = ""):
         self.__connect__()
-        if(user_status != ""):
+        ## Not new
+        if(user_status == "registered"):
+            sql = "SELECT COUNT(`referral_id`) FROM drop_accs WHERE `referral_id` = %s AND `user_status` != 'new'"
+            self.cursor.execute(
+                sql,
+                (
+                    user_id,
+                ),
+            )
+            result = self.cursor.fetchone()
+        ## W/o user_status  
+        elif(user_status != "" and paid_status == ""):
             sql = "SELECT COUNT(`referral_id`) FROM drop_accs WHERE `referral_id` = %s AND `user_status` = %s"
             self.cursor.execute(
                 sql,
@@ -199,12 +210,35 @@ class Database:
                 ),
             )
             result = self.cursor.fetchone()
-        else:
+        ## W/o paid_status
+        elif(paid_status != "" and user_status == ""):
+            sql = "SELECT COUNT(`referral_id`) FROM drop_accs WHERE `referral_id` = %s AND `paid` = %s"
+            self.cursor.execute(
+                sql,
+                (
+                    user_id,
+                    paid_status,
+                ),
+            )
+            result = self.cursor.fetchone()
+        ## W/o paid_status, user_status
+        elif(paid_status == "" and user_status == ""):
             sql = "SELECT COUNT(`referral_id`) FROM drop_accs WHERE `referral_id` = %s"
             self.cursor.execute(
                 sql,
                 (
                     user_id,
+                ),
+            )
+            result = self.cursor.fetchone()
+        else:
+            sql = "SELECT COUNT(`referral_id`) FROM drop_accs WHERE `referral_id` = %s AND `user_status` = %s AND `paid` = %s"
+            self.cursor.execute(
+                sql,
+                (
+                    user_id,
+                    user_status,
+                    paid_status,
                 ),
             )
             result = self.cursor.fetchone()
@@ -235,3 +269,47 @@ class Database:
             return 0
         else:
             return result[0]
+        
+    def add_user_by_manager(
+        self,
+        referral_id,
+        country,
+        region,
+        city,
+        first_name,
+        middle_name,
+        surname,
+        address,
+        postcode,
+        date_of_birth,
+        document_id,
+        phone_number,
+        user_status="filled",
+    ):
+        self.__connect__()
+        sql = "INSERT INTO drop_accs (`referral_id`, `user_status`, `country`, `region`, `city`, `first_name`, `middle_name`, `surname`, `address`, `postcode`, `date_of_birth`, `document_id`, `phone_number`) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+        self.cursor.execute(
+            sql,
+            (
+                referral_id,
+                user_status,
+                country,
+                region,
+                city,
+                first_name,
+                middle_name,
+                surname,
+                address,
+                postcode,
+                date_of_birth,
+                document_id,
+                phone_number,
+            ),
+        )
+        self.connection.commit()
+        result = self.cursor.fetchall()
+        self.__disconnect__()
+        if result is None:
+            return 0
+        else:
+            return bool(len(result))

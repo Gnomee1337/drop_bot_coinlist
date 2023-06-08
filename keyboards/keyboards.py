@@ -43,7 +43,8 @@ def managerMenu(lang='ru'):
     managerMenu = InlineKeyboardMarkup(resize_keyboard = True)
 
     btnShowStats = InlineKeyboardButton(set_localization("Моя статистика", lang),callback_data='managerstats')
+    btnAddUserManually = InlineKeyboardButton(set_localization("Добавить пользователя", lang),callback_data='manageradduser')
 
-    managerMenu.add(btnShowStats)
+    managerMenu.add(btnShowStats, btnAddUserManually)
 
     return managerMenu
