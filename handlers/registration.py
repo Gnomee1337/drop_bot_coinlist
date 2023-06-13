@@ -78,6 +78,11 @@ async def get_ref(user_id):
 #@dp.message_handler(state = '*', commands=['cancel'])
 #@dp.message_handler(Text(equals='cancel', ignore_case=True), state='*')
 async def cancel_handler(message: types.Message, state: FSMContext):
+    try:
+        user_language = db.get_user_language(message.from_user.id)
+    except:
+        user_language = "ru"
+        pass
     #Allow user to cancel any action
     current_state = await state.get_state()
     if current_state is None:
@@ -87,7 +92,7 @@ async def cancel_handler(message: types.Message, state: FSMContext):
     await state.finish()
     # And remove keyboard (just in case)
     #await message.reply('Отмена.\nCancelled.', reply_markup=types.ReplyKeyboardRemove())
-    await message.reply('Отмена.\nCancelled.', reply_markup=nav.mainMenu())
+    await message.reply('Отмена.\nCancelled.', reply_markup=nav.mainMenu(user_language))
 
 async def clear_chat(start_id: int, chat_id: int) -> None:
     return 0
@@ -332,13 +337,15 @@ async def input_document_type(call: types.CallbackQuery, state: FSMContext):
         else:
             return
         if(call.message != None):
-            user_language = db.get_user_language(call.message.from_user.id)
+            data = await state.get_data()
+            user_language = db.get_user_language(data['tg_id'])
             await RegStates.document_id.set()
             try:
                 fpassphotopath = os.path.join( os.path.dirname(__file__), "..", "images_for_users", "zagran-pass-example.jpg" )
                 fpassphoto = open(fpassphotopath, "rb")
+                captions = set_localization("Укажите номер вашего документа, как указано в вашем документе.\n(Пример: На изображении загранпаспорта Номер Документа выделен зеленым цветом)", user_language)
                 await call.message.answer_photo(fpassphoto, 
-                                                caption=set_localization("Укажите номер вашего документа, как указано в вашем документе.\n(Пример: На изображении загранпаспорта Номер Документа выделен зеленым цветом)", user_language),
+                                                caption=captions,
                                                 parse_mode="html")
             except:
                 logging.error("Error occurred while sending fpass photo")
@@ -405,15 +412,15 @@ async def input_phonenumber(message: types.Message, state: FSMContext):
     @dp.callback_query_handler(state=RegStates.submitdata)
     async def submit_data(call: types.CallbackQuery, state: FSMContext):
         if call.message:
+            data = await state.get_data()
             try:
-                user_language = db.get_user_language(call.message.from_user.id)
+                user_language = db.get_user_language(data['tg_id'])
             except:
                 logging.warning("Warning while getting user language in Submit Data stage")
                 pass
             if call.data == "submitdata":
-                data = await state.get_data()
+                ## Add user as manager in table
                 if(data['reg_by_manager'] == 1):
-                    ## Add user as manager in table
                     db.add_user_by_manager(
                                             #data['tg_id'],
                                             #data['tg_username'],
@@ -432,6 +439,7 @@ async def input_phonenumber(message: types.Message, state: FSMContext):
                                             data['phone_number']
                                         )
                     logging.debug("DB user ADDED in table by Manager!")
+                ## Add user as user
                 else:
                     ## Update user data in table
                     db.add_user_account(data['tg_id'],
