@@ -405,12 +405,12 @@ async def input_phonenumber(message: types.Message, state: FSMContext):
     @dp.callback_query_handler(state=RegStates.submitdata)
     async def submit_data(call: types.CallbackQuery, state: FSMContext):
         if call.message:
+            try:
+                user_language = db.get_user_language(call.message.from_user.id)
+            except:
+                logging.warning("Warning while getting user language in Submit Data stage")
+                pass
             if call.data == "submitdata":
-                try:
-                    user_language = db.get_user_language(call.message.from_user.id)
-                except:
-                    logging.warning("Warning while getting user language in Submit Data stage")
-                    pass
                 data = await state.get_data()
                 if(data['reg_by_manager'] == 1):
                     ## Add user as manager in table
@@ -489,6 +489,10 @@ async def input_phonenumber(message: types.Message, state: FSMContext):
                 #await message.answer(set_localization("Скоро с вами свяжется менеджер для прохождения верификации и выплаты 💰",user_language), reply_markup=nav.mainMenu(user_language))
                 await state.finish()
             if call.data == "declinedata":
+                try:
+                    data = await state.get_data()
+                except:
+                    pass
                 #Allow user to cancel any action
                 current_state = await state.get_state()
                 if current_state is None:
@@ -498,7 +502,7 @@ async def input_phonenumber(message: types.Message, state: FSMContext):
                 await state.finish()
                 # And remove keyboard (just in case)
                 #await message.reply('Отмена.\nCancelled.', reply_markup=types.ReplyKeyboardRemove())
-                await message.reply('Отмена.\nCancelled.', reply_markup=nav.mainMenu(user_language))
+                await bot.send_message(data['tg_id'],'Отмена.\nCancelled.', reply_markup=nav.mainMenu(user_language))
 
 
 def register_handlers_registration(dp : Dispatcher):
