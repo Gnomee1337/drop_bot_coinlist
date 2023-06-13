@@ -161,10 +161,10 @@ async def main_menu(call: types.CallbackQuery, state: FSMContext):
                 await state.update_data(reg_by_manager = 0)
                 await clear_chat(call.message.message_id, call.message.chat.id)
         if call.data == 'FAQ':
-            # if(user_language == "en"):
-            #      await call.message.answer(config.FAQ_info_en, parse_mode=types.ParseMode.MARKDOWN_V2, reply_markup=nav.mainMenu(user_language))
-            # else:
-            await call.message.answer(config.FAQ_info, parse_mode=types.ParseMode.MARKDOWN_V2, reply_markup=nav.mainMenu(user_language))
+            if(user_language == "en"):
+                await call.message.answer(config.FAQ_info_en, parse_mode=types.ParseMode.MARKDOWN_V2, reply_markup=nav.mainMenu(user_language))
+            else:
+                await call.message.answer(config.FAQ_info, parse_mode=types.ParseMode.MARKDOWN_V2, reply_markup=nav.mainMenu(user_language))
             ## If user manager
             if(db.is_user_manager(call.from_user.id)):
                 await state.set_state(None)
@@ -480,11 +480,14 @@ async def input_phonenumber(message: types.Message, state: FSMContext):
                 except:
                     logging.error("Error occurred while sending User Info to Top-Manager")
                     pass
+                await bot.send_message(data['tg_id'],'🎉')
+                #await message.answer('🎉')
+                #await clear_chat(message.message_id, message.chat.id)
+                await bot.send_message(data['tg_id'], set_localization("Поздравляю, информация сохранена!",user_language))
+                #await message.answer(set_localization("Поздравляю, информация сохранена!",user_language))
+                await bot.send_message(data['tg_id'], set_localization("Скоро с вами свяжется менеджер для прохождения верификации и выплаты 💰",user_language), reply_markup=nav.mainMenu(user_language))
+                #await message.answer(set_localization("Скоро с вами свяжется менеджер для прохождения верификации и выплаты 💰",user_language), reply_markup=nav.mainMenu(user_language))
                 await state.finish()
-                await message.answer('🎉')
-                await clear_chat(message.message_id, message.chat.id)
-                await message.answer(set_localization("Поздравляю, информация сохранена!",user_language))
-                await message.answer(set_localization("Скоро с вами свяжется менеджер для прохождения верификации и выплаты 💰",user_language), reply_markup=nav.mainMenu(user_language))
             if call.data == "declinedata":
                 #Allow user to cancel any action
                 current_state = await state.get_state()
