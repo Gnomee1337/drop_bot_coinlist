@@ -88,7 +88,7 @@ if (!isset($_SESSION['loggedin'])) {
                                                     $users_verify_row[12] = $m_name;
                                                 }
                                             }
-                                    
+
                                             #Change user_status code to text
                                             $user_status = $users_verify_row[13];
                                             if ($user_status == "filled") {
