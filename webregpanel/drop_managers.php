@@ -39,10 +39,14 @@ if (!isset($_SESSION['loggedin'])) {
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
-                                                <th>Телеграм</th>
+                                                <th>Телеграм Ник</th>
+                                                <th>Телеграм ID</th>
                                                 <th>ID</th>
-                                                <th>Пригласил</th>
-                                                <th>Заполненных</th>
+                                                <th>Всего Пригласил</th>
+                                                <th>Зареганных</th>
+                                                <th>Апрувнутых</th>
+                                                <th>Апрув + Не Оплачен</th>
+                                                <th>Оплаченных</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -54,29 +58,48 @@ if (!isset($_SESSION['loggedin'])) {
 
                                             #Output data
                                             while ($managers_row = $drop_managers->fetch_array()) {
-                                              
-                                                // #Change referral_id to manager_nickname
-                                                // while ($manager_row = $drop_managers->fetchArray()) {
-                                                //     if ($manager_row[1] == $users_verify_row[9])
-                                                //         $users_verify_row[9] = $manager_row[2];
-                                                // }
-                                        
+                                                
+                                                #Total invited
                                                 $statement = $db->prepare("SELECT COUNT(`referral_id`) FROM drop_accs WHERE `referral_id` = '$managers_row[1]'");
                                                 $statement->execute();
                                                 $invited_count = $statement->get_result();
                                                 $invited_count = $invited_count->fetch_array();
+                                                
+                                                #Total reg
+                                                $statement = $db->prepare("SELECT COUNT(`referral_id`) FROM drop_accs WHERE `user_status` != 'new' AND  `referral_id` = '$managers_row[1]'");
+                                                $statement->execute();
+                                                $reg_count = $statement->get_result();
+                                                $reg_count = $reg_count->fetch_array();
 
+                                                #Approved
                                                 $statement = $db->prepare("SELECT COUNT(`referral_id`) FROM drop_accs WHERE `user_status` = 'approved' AND  `referral_id` = '$managers_row[1]'");
                                                 $statement->execute();
                                                 $approved_count = $statement->get_result();
                                                 $approved_count = $approved_count->fetch_array();
 
+                                                #Paid
+                                                $statement = $db->prepare("SELECT COUNT(`referral_id`) FROM drop_accs WHERE `paid` = 'paid' AND  `referral_id` = '$managers_row[1]'");
+                                                $statement->execute();
+                                                $paid_count = $statement->get_result();
+                                                $paid_count = $paid_count->fetch_array();
+
+                                                #Approved and Unpaid
+                                                $statement = $db->prepare("SELECT COUNT(`referral_id`) FROM drop_accs WHERE `paid` = 'unpaid' AND `user_status` = 'approved' AND `referral_id` = '$managers_row[1]'");
+                                                $statement->execute();
+                                                $approved_unpaid_count = $statement->get_result();
+                                                $approved_unpaid_count = $approved_unpaid_count->fetch_array();
+
+
                                                 #Output in table
                                                 echo
                                                     "<tr><td class='supertable'>", '@' . $managers_row[0],
+                                                    "</td><td class='txt'>", $managers_row[1],
                                                     "</td><td class='txt'>", $managers_row[2],
                                                     "</td><td class='txt'>", $invited_count[0],
+                                                    "</td><td class='txt'>", $reg_count[0],
                                                     "</td><td class='txt'>", $approved_count[0],
+                                                    "</td><td class='txt'>", $approved_unpaid_count[0],
+                                                    "</td><td class='txt'>", $paid_count[0],
                                                     // "</td><td>","<input type=\"checkbox\" style=\"text-align:center;\" ng-model=\"x.dedbuffer\">",
                                                     "</td></tr>";
                                             }

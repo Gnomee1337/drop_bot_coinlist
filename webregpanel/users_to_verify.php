@@ -1,6 +1,6 @@
 <?php
 $status = session_status();
-if($status == PHP_SESSION_NONE){
+if ($status == PHP_SESSION_NONE) {
     //There is no active session
     session_start();
 }
@@ -49,15 +49,21 @@ if (!isset($_SESSION['loggedin'])) {
                         $statement->execute();
                         $drop_managers = $statement->get_result();
 
+                        #Create managers array
+                        $manager_array = array();
+                        while ($manager_row = $drop_managers->fetch_row()) {
+                            $manager_array += [$manager_row[1] => $manager_row[2]];
+                        }
+
                         #Output data
                         while ($users_verify_row = $drop_accs->fetch_array()) {
 
                             #Change referral_id to manager_nickname
-                            while ($manager_row = $drop_managers->fetch_array()) {
-                                if ($manager_row[1] == $users_verify_row[12])
-                                    $users_verify_row[12] = $manager_row[2];
+                            foreach ($manager_array as $m_id => $m_name) {
+                                if ($users_verify_row[12] == $m_id) {
+                                    $users_verify_row[12] = $m_name;
+                                }
                             }
-
                             #Change user_status code to text
                             $user_status = $users_verify_row[13];
                             if ($user_status == "filled") {

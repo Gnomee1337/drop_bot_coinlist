@@ -47,7 +47,7 @@ async def cm_start(message: types.Message, state: FSMContext):
         ## If user manager
         if(db.is_user_manager(message.from_user.id)):
             await state.set_state(None)
-            await message.answer(set_localization('Привет ',user_language)+message.from_user.username +"!\nМеню менеджера!", parse_mode="html", reply_markup=nav.managerMenu(user_language))
+            await message.answer(set_localization('Привет ',user_language)+message.from_user.username +set_localization("!\nМеню менеджера!",user_language), parse_mode="html", reply_markup=nav.managerMenu(user_language))
     else:
     ## If user not exists
         ## Get referral id
@@ -78,6 +78,11 @@ async def get_ref(user_id):
 #@dp.message_handler(state = '*', commands=['cancel'])
 #@dp.message_handler(Text(equals='cancel', ignore_case=True), state='*')
 async def cancel_handler(message: types.Message, state: FSMContext):
+    try:
+        user_language = db.get_user_language(message.from_user.id)
+    except:
+        user_language = "ru"
+        pass
     #Allow user to cancel any action
     current_state = await state.get_state()
     if current_state is None:
@@ -87,7 +92,7 @@ async def cancel_handler(message: types.Message, state: FSMContext):
     await state.finish()
     # And remove keyboard (just in case)
     #await message.reply('Отмена.\nCancelled.', reply_markup=types.ReplyKeyboardRemove())
-    await message.reply('Отмена.\nCancelled.', reply_markup=nav.mainMenu())
+    await message.reply('Отмена.\nCancelled.', reply_markup=nav.mainMenu(user_language))
 
 async def clear_chat(start_id: int, chat_id: int) -> None:
     return 0
@@ -106,17 +111,22 @@ async def setLanguage(callback: types.CallbackQuery, state: FSMContext):
     await bot.send_message(callback.from_user.id, callback.from_user.username + " " +nav.set_localization("привет, прочитай информацию!", lang), reply_markup=nav.mainMenu(lang))
     logging.debug("###DEBUG### setLanguage finished")
 
+## Manager Menu (Manager Stats)
 @dp.callback_query_handler(text_contains = "managerstats", state=None)
 async def managerStats(callback: types.CallbackQuery, state: FSMContext):
     logging.debug("###DEBUG### managerstats started")
     user_language = db.get_user_language(callback.from_user.id)
     await bot.delete_message(callback.from_user.id, callback.message.message_id)
     await bot.send_message(callback.from_user.id, 
-                           nav.set_localization("Привет ", str(user_language)) + str(callback.from_user.username) 
-                            +set_localization("\nВаша статистика",user_language)
-                            +set_localization("\nРеферальная ссылка: ",user_language)+ await get_ref(callback.from_user.id)
-                            +set_localization("\nНовых участников: ",user_language)+str(db.get_manager_invites(callback.from_user.id, user_status="new"))
-                            +set_localization("\nПрошедших регистрацию: ",user_language)+str(db.get_manager_invites(callback.from_user.id, user_status="filled")),
+                           set_localization("Привет ", user_language) + str(callback.from_user.username) 
+                            +set_localization("\nРеферальная ссылка: ",user_language) + await get_ref(callback.from_user.id) + "\n"
+                            +"<b>" + set_localization("\nВаша статистика",user_language) + "</b>"
+                            +set_localization("\nВсего рефералов: ",user_language)+str(db.get_manager_invites(callback.from_user.id))
+                            +set_localization("\nНе зарегистрированных: ",user_language)+str(db.get_manager_invites(callback.from_user.id, user_status="new"))
+                            +set_localization("\nПрошедших регистрацию: ",user_language)+str(db.get_manager_invites(callback.from_user.id, user_status="registered"))
+                            +set_localization("\nПодтвержденных: ",user_language)+str(db.get_manager_invites(callback.from_user.id, user_status="approved")) + "\n"
+                            +set_localization("\nВыплаченных: ",user_language)+str(db.get_manager_invites(callback.from_user.id, paid_status="paid"))
+                            +set_localization("\nПодтвержден, но <b>НЕ</b> выплачен: ",user_language)+str(db.get_manager_invites(callback.from_user.id, user_status="approved", paid_status="unpaid")),
                            reply_markup=nav.mainMenu(user_language),parse_mode="html")
     ## If user manager
     if(db.is_user_manager(callback.from_user.id)):
@@ -124,6 +134,18 @@ async def managerStats(callback: types.CallbackQuery, state: FSMContext):
         await bot.send_message(callback.from_user.id,set_localization("Менеджер Меню",user_language), parse_mode="html", reply_markup=nav.managerMenu(user_language))
     await clear_chat(callback.message.message_id, callback.message.chat.id)
     logging.debug("###DEBUG### managerstats finished")
+
+## Manager Menu (Add User)
+@dp.callback_query_handler(text_contains = "manageradduser", state=None)
+async def managerAddUser(callback: types.CallbackQuery, state: FSMContext):
+    logging.debug("###DEBUG### managerAddUser started")
+    user_language = db.get_user_language(callback.from_user.id)
+    await callback.message.answer(set_localization("Введите свою страну на английском языке.\n(Пример: Ukraine)",user_language))
+    await RegStates.country.set()
+    ## Registration by Manager
+    await state.update_data(reg_by_manager = 1)
+    await clear_chat(callback.message.message_id, callback.message.chat.id)
+    logging.debug("###DEBUG### managerAddUser finished")
 
 @dp.callback_query_handler()
 #@dp.callback_query_handler(lambda x: x.data and x.data.startswith("reg "))
@@ -140,13 +162,18 @@ async def main_menu(call: types.CallbackQuery, state: FSMContext):
             else:
                 await call.message.answer(set_localization("Введите свою страну на английском языке.\n(Пример: Ukraine)",user_language))
                 await RegStates.country.set()
+                ## Registration not by Manager
+                await state.update_data(reg_by_manager = 0)
                 await clear_chat(call.message.message_id, call.message.chat.id)
         if call.data == 'FAQ':
-            await call.message.answer(config.FAQ_info, parse_mode=types.ParseMode.MARKDOWN_V2, reply_markup=nav.mainMenu(user_language))
+            if(user_language == "en"):
+                await call.message.answer(config.FAQ_info_en, parse_mode=types.ParseMode.MARKDOWN_V2, reply_markup=nav.mainMenu(user_language))
+            else:
+                await call.message.answer(config.FAQ_info, parse_mode=types.ParseMode.MARKDOWN_V2, reply_markup=nav.mainMenu(user_language))
             ## If user manager
             if(db.is_user_manager(call.from_user.id)):
                 await state.set_state(None)
-                await call.message.answer(set_localization('Привет ',user_language)+call.message.chat.username +"!\nМеню менеджера!", parse_mode="html", reply_markup=nav.managerMenu(user_language))
+                await call.message.answer(set_localization('Привет ',user_language)+call.message.chat.username +set_localization("!\nМеню менеджера!",user_language), parse_mode="html", reply_markup=nav.managerMenu(user_language))
                 await clear_chat(call.message.message_id, call.message.chat.id)
         # elif call.data == 'coinlistinfo':
         #     await call.message.answer('конлист', reply_markup=nav.mainMenu())
@@ -310,13 +337,15 @@ async def input_document_type(call: types.CallbackQuery, state: FSMContext):
         else:
             return
         if(call.message != None):
-            user_language = db.get_user_language(call.message.from_user.id)
+            data = await state.get_data()
+            user_language = db.get_user_language(data['tg_id'])
             await RegStates.document_id.set()
             try:
                 fpassphotopath = os.path.join( os.path.dirname(__file__), "..", "images_for_users", "zagran-pass-example.jpg" )
                 fpassphoto = open(fpassphotopath, "rb")
+                captions = set_localization("Укажите номер вашего документа, как указано в вашем документе.\n(Пример: На изображении загранпаспорта Номер Документа выделен зеленым цветом)", user_language)
                 await call.message.answer_photo(fpassphoto, 
-                                                caption=set_localization("Укажите номер вашего документа, как указано в вашем документе.\n(Пример: На изображении загранпаспорта Номер Документа выделен зеленым цветом)", user_language),
+                                                caption=captions,
                                                 parse_mode="html")
             except:
                 logging.error("Error occurred while sending fpass photo")
@@ -361,17 +390,17 @@ async def input_phonenumber(message: types.Message, state: FSMContext):
         data = await state.get_data()
         await message.answer("<b>" + set_localization("Вы уверены, что указали данные верно?\nПроверьте пожалуйста!\n",user_language) + "</b>"
                              + "\n"
-                             + "Страна: " + str(data['country']) + "\n"
-                             + "Область: " + str(data['region']) + "\n"
-                             + "Город: " + str(data['city']) + "\n"
-                             + "Имя: " + str(data['first_name']) + "\n"
-                             + "Отчество: " + str(data['middle_name']) + "\n"
-                             + "Фамилия: " + str(data['surname']) + "\n"
-                             + "Адрес: " + str(data['address']) + "\n"
-                             + "Почтовый Индекс: " + str(data['postcode']) + "\n"
-                             + "Дата Рождения: " + str(data['date_of_birth']) + "\n"
-                             + "Номер документа: " + str(data['document_id']) + "\n"
-                             + "Номер телефона: " + str(data['phone_number']),
+                             + set_localization("Страна: ",user_language) + str(data['country']) + "\n"
+                             + set_localization("Область: ",user_language) + str(data['region']) + "\n"
+                             + set_localization("Город: ",user_language) + str(data['city']) + "\n"
+                             + set_localization("Имя: ",user_language) + str(data['first_name']) + "\n"
+                             + set_localization("Отчество: ",user_language) + str(data['middle_name']) + "\n"
+                             + set_localization("Фамилия: ",user_language) + str(data['surname']) + "\n"
+                             + set_localization("Адрес: ",user_language) + str(data['address']) + "\n"
+                             + set_localization("Почтовый Индекс: ",user_language) + str(data['postcode']) + "\n"
+                             + set_localization("Дата Рождения: ",user_language) + str(data['date_of_birth']) + "\n"
+                             + set_localization("Номер документа: ",user_language) + str(data['document_id']) + "\n"
+                             + set_localization("Номер телефона: ",user_language) + str(data['phone_number']),
                              parse_mode="html",
                              reply_markup=nav.submitMenu(user_language))
     except:
@@ -383,32 +412,59 @@ async def input_phonenumber(message: types.Message, state: FSMContext):
     @dp.callback_query_handler(state=RegStates.submitdata)
     async def submit_data(call: types.CallbackQuery, state: FSMContext):
         if call.message:
+            data = await state.get_data()
+            try:
+                user_language = db.get_user_language(data['tg_id'])
+            except:
+                logging.warning("Warning while getting user language in Submit Data stage")
+                pass
             if call.data == "submitdata":
-                data = await state.get_data()
-                ## Update user data in table
-                db.add_user_account(data['tg_id'],
-                                    data['tg_username'],
-                                    data['country'],
-                                    data['region'],
-                                    data['city'],
-                                    #data['full_name'],
-                                    data['first_name'],
-                                    data['middle_name'],
-                                    data['surname'],
-                                    data['address'],
-                                    data['postcode'],
-                                    data['date_of_birth'],
-                                    data['document_type'] + data['document_id'],
-                                    data['phone_number'])
-                logging.debug("DB user data update in table!")
-                ## Notify drop manager about filled user
-                drop_manager_id = db.get_user_referral(data['tg_id'])
-                if(drop_manager_id != 0):
-                    try:
-                        manager_language = db.get_user_language(drop_manager_id)
-                        await bot.send_message(drop_manager_id, "@" + data['tg_username'] + set_localization(" заполнил свои данные и ждет прохождения верификации!", manager_language))
-                    except:
-                        pass
+                ## Add user as manager in table
+                if(data['reg_by_manager'] == 1):
+                    db.add_user_by_manager(
+                                            #data['tg_id'],
+                                            #data['tg_username'],
+                                            data['tg_id'],
+                                            data['country'],
+                                            data['region'],
+                                            data['city'],
+                                            #data['full_name'],
+                                            data['first_name'],
+                                            data['middle_name'],
+                                            data['surname'],
+                                            data['address'],
+                                            data['postcode'],
+                                            data['date_of_birth'],
+                                            data['document_type'] + data['document_id'],
+                                            data['phone_number']
+                                        )
+                    logging.debug("DB user ADDED in table by Manager!")
+                ## Add user as user
+                else:
+                    ## Update user data in table
+                    db.add_user_account(data['tg_id'],
+                                        data['tg_username'],
+                                        data['country'],
+                                        data['region'],
+                                        data['city'],
+                                        #data['full_name'],
+                                        data['first_name'],
+                                        data['middle_name'],
+                                        data['surname'],
+                                        data['address'],
+                                        data['postcode'],
+                                        data['date_of_birth'],
+                                        data['document_type'] + data['document_id'],
+                                        data['phone_number'])
+                    logging.debug("DB user data update in table!")
+                    ## Notify drop manager about filled user
+                    drop_manager_id = db.get_user_referral(data['tg_id'])
+                    if(drop_manager_id != 0):
+                        try:
+                            manager_language = db.get_user_language(drop_manager_id)
+                            await bot.send_message(drop_manager_id, "@" + data['tg_username'] + set_localization(" заполнил свои данные и ждет прохождения верификации!", manager_language))
+                        except:
+                            pass
                 ## Notify top manager for new filled user
                 try:
                     top_managers = db.get_top_managers()
@@ -432,12 +488,19 @@ async def input_phonenumber(message: types.Message, state: FSMContext):
                 except:
                     logging.error("Error occurred while sending User Info to Top-Manager")
                     pass
+                await bot.send_message(data['tg_id'],'🎉')
+                #await message.answer('🎉')
+                #await clear_chat(message.message_id, message.chat.id)
+                await bot.send_message(data['tg_id'], set_localization("Поздравляю, информация сохранена!",user_language))
+                #await message.answer(set_localization("Поздравляю, информация сохранена!",user_language))
+                await bot.send_message(data['tg_id'], set_localization("Скоро с вами свяжется менеджер для прохождения верификации и выплаты 💰",user_language), reply_markup=nav.mainMenu(user_language))
+                #await message.answer(set_localization("Скоро с вами свяжется менеджер для прохождения верификации и выплаты 💰",user_language), reply_markup=nav.mainMenu(user_language))
                 await state.finish()
-                await message.answer('🎉')
-                await clear_chat(message.message_id, message.chat.id)
-                await message.answer(set_localization("Поздравляю, информация сохранена!",user_language))
-                await message.answer(set_localization("Скоро с вами свяжется менеджер для прохождения верификации и выплаты 💰",user_language), reply_markup=nav.mainMenu(user_language))
             if call.data == "declinedata":
+                try:
+                    data = await state.get_data()
+                except:
+                    pass
                 #Allow user to cancel any action
                 current_state = await state.get_state()
                 if current_state is None:
@@ -447,7 +510,7 @@ async def input_phonenumber(message: types.Message, state: FSMContext):
                 await state.finish()
                 # And remove keyboard (just in case)
                 #await message.reply('Отмена.\nCancelled.', reply_markup=types.ReplyKeyboardRemove())
-                await message.reply('Отмена.\nCancelled.', reply_markup=nav.mainMenu())
+                await bot.send_message(data['tg_id'],'Отмена.\nCancelled.', reply_markup=nav.mainMenu(user_language))
 
 
 def register_handlers_registration(dp : Dispatcher):

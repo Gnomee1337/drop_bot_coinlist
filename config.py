@@ -72,10 +72,10 @@ FAQ_info = bold('🔹 Для чего создан этот бот?') + '\n\n' +
            '\. Перед этапом настоятельно рекомендуем ' + underline('протереть камеру') + ', так чёткость фотографий будет выше' + '\n' + bold('➖ Сфотографировать свое лицо') + \
            '\. Так же не забудьте ' + underline('протереть') + ' фронтальную камеру' + '\n\n' + bold('❗Не переживайте, НИ ОДИН человек не увидит Ваши фотографии') + '\n\n' +\
            'Верификация происходит на облачном сайте, где ' + bold('сканер (машина)') + ' сравнивает введённые ранее данные с данными в документе, а также лицо с фотографией в документе' + '\n\n' + \
-           'После ' + underline('успешной') + ' верификации личности Вы получаете ' + bold('10') + ' $ 💸' + 'Переводим Ваши ' + bold('честно заработанные') + ' на:' + '\n' + bold('➖ Любые карты')+ '\n' + bold('➖ Баланс телефона') + '\n' + bold('➖ Любые кошельки') + '\n' + \
+           'После ' + underline('успешной') + ' верификации личности Вы получаете ' + bold('оплату') + ' 💸' + 'Переводим Ваши ' + bold('честно заработанные') + ' на:' + '\n' + bold('➖ Любые карты')+ '\n' + bold('➖ Баланс телефона') + '\n' + bold('➖ Любые кошельки') + '\n' + \
            bold('➖ Криптовалюта') + '\n\n\n' + bold('🔹 Как заработать больше одного раза?') + '\n\n' + \
            'Вы можете предложить своим ' + bold('друзьям') + ' \| ' + bold('родственникам') + ' \| ' + bold('знакомым') + ' \| ' + bold('коллегам') + ' \| ' + bold('одногруппникам') + \
-           ' \.\.\. пройти регистрацию в нашем боте, а полученные деньги 💵поделить между собой по вашему усмотрению' + '\n\n' + \
+           ' \.\.\. пройти регистрацию в нашем боте, а полученные деньги 💵 поделить между собой по вашему усмотрению' + '\n\n' + \
            bold('❗️ Не стоит вводить чужие данные со своего аккаунта телеграмма') + \
            ' \(если Вы уже ' + underline('ранее регистрировали') + ' свои\), т\.к\. бот с большой долей вероятности запретит Вам пройти регистрацию, оценив её как ' + underline('повторную') + \
            '\n\n\n' + bold('🔹 А это законно?') + '\n\n' + 'Все ' + bold('законно') + ' и ' + bold('честно') + ', Вы ' + bold('ничем не рискуете') + ', так как ' + bold('ничего не нарушаете') + \
@@ -84,3 +84,31 @@ FAQ_info = bold('🔹 Для чего создан этот бот?') + '\n\n' +
            '\n\n' + 'Мы дорожим своей репутацией и чистотой имени, поэтому всегда стараемся разрешить любую конфликтную ситуацию' + '\n\n' + \
            bold('За один только 2022 мы сделали больше 3000! аккаунтов и каждый человек получил свои деньги') + '\n\n\n' + bold('✅ Теперь переходите к регистрации и начните зарабатывать с нами!') + \
            '\n\n'
+
+FAQ_info_en = bold('🔹 What is this bot for?') + '\n\n' + 'The bot was created to make money on shares of various services, in particular ' + link(title='coinlist', url='https://coinlist.co') + '\n\n\n' + \
+            bold('🔹 How does it all work?') + '\n\n' + "It's very simple\!" + '\n\n' + \
+            'We register accounts for you in various services using our referral link' + '\n\n' + bold('We only register 18+') + '\n\n' + \
+            'We get a bonus for verifying your account, which we share with you 😉' + \
+            '\n\n\n' + bold('🔹 How do I make money?') + '\n\n' + 'Even easier\!' + '\n\n' + 'After you start the bot and click on ' + bold('registration') + \
+            ', the bot will successively propose you to enter the necessary data '+bold('(you must enter it in English and Latin): ') + '\n' + bold('➖ Country') + '\n' + bold('➖ Region') + '\n' + bold('➖ City') + '\n' + bold('➖ Name') + '\n' + bold('➖ Middle Name') + '\n' + bold('➖ Last Name') + '\n' + bold('➖ Address') + ' \(as in the passport\): city, street, house \(' + bold('no apartment needed') + \
+            '\)' + '\n' + bold('➖ Postcode') + ' \(you can check your address online\)' + '\n' + bold('➖ Date of Birth') + '\n' + bold('➖ Passport/License Number') + '\n' + bold('➖ Phone Number') + \
+            ' \(you need it for registration\)' + '\n\n\n' + bold('🔹 What next?') + '\n\n' + 'And then you have to wait for an account to be created for you ⏰' + \
+            '\n' + 'On average, the process takes ' + underline('30-40 minutes') + '\. ±30 minutes after you start your account, we\`ll ask you if you\`re ready to be verified' + '\n\n' + \
+            bold("It's very important to pass the verification in 5-10 minutes") + ', as it considerably increases the chance of success at the first attempt' + '\n\n' + \
+            'After the bot receives your information, after the time mentioned above, a manager will contact you to verify your account and also provide you with the verification link\.' + \
+            '\n\n' + 'At this stage you have to:' + '\n' + bold('➖ Follow the link') + '\n' + bold('➖ Take a photo of your passport') + ' so that all four corners of the document are in the frame ' + bold('all four corners of the document') + \
+            '\. We strongly recommend that you ' + underline('wipe the camera') + ' so that your photos are clearer' + '\n' + bold('➖ Take a picture of your face') + \
+            '\. Also remember to ' + underline('wipe') + ' front camera' + '\n\n' + bold("❗Don't worry, NO ONE will see your photos") + '\n\n' +\
+            'Verification takes place on the cloud site, where ' + bold("scanner (machine)") + ' compares the previously entered data with the data in the document, as well as the face with the photo in the document' + '\n\n' + \
+            'After ' + underline('successful') + ' identity verification you get ' + bold('payment') + ' 💸' + 'Transfer your ' + bold('legally earned') + ' to:' + '\n' + bold('➖ Any cards')+ '\n' + bold('➖ Phone balance') + '\n' + bold('➖ Any wallets') + '\n' + \
+            bold('➖ Cryptocurrency') + '\n\n\n' + bold('🔹 How can I earn more than once?') + '\n\n' + \
+            'You can offer your ' + bold('friends') + ' \| ' + bold('relatives') + ' \| ' + bold('acquaintances') + ' \| ' + bold('colleagues') + ' \| ' + bold('classmates') + \
+            ' \.\.\. register in our bot, and 💵 share the money received amongst yourselves as you see fit' + '\n\n' + \
+            bold("❗️ Don't enter someone else details from your telegram account") + \
+            ' \(if you have already ' + underline('previously registered') + ' your own\), since the bot will most likely prohibit you from registering, judging it as ' + underline('repeated') + \
+            '\n\n\n' + bold('🔹 Is it legal?') + '\n\n' + 'Everything is ' + bold('legal') + ' and ' + bold('fair') + ', you ' + bold('no risk') + ', because ' + bold('you won`t violate anything') + \
+            '\. Your information is just used to register accounts' + '\n\n' + bold('❗Nowhere else again and under no circumstances') + '\n\n\n' + \
+            bold("🔹 Isn't it cheating?") + '\n\n' + 'We\`ve been doing this for ' + bold('3 years') + 'and we\`re expanding now\!' + \
+            '\n\n' + 'We value our reputation and name purity, so we always try to resolve any conflict situation' + '\n\n' + \
+            bold("In 2022 alone we made over 3000! accounts and every person got their money") + '\n\n\n' + bold('✅ Now go ahead register and start earning with us\!') + \
+            '\n\n'
