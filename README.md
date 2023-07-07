@@ -1,5 +1,6 @@
 # User Registration for Crypto Platforms
-A bot for registering users by filling in user data to register on platforms like Coinlist.
+A bot for registering users (drops) by filling in user data to register on platforms like Coinlist.
+> <sub>FAQ text and countries list taken from https://github.com/SoDeepASMR/CoinListBot</sub>
 
 ## Setup Bot:
 1. Create DB 
@@ -31,3 +32,9 @@ A bot for registering users by filling in user data to register on platforms lik
 * Add/Edit/Delete users
 * Add/Edit/Delete bot-moderators
 * <sub>(Admin-Panel UI has only RU localization)</sub>
+
+## Bot Example:
+![](git_images/registration_process.gif)
+
+## Admin-Panel Example:
+![](git_images/adminpanel_process.gif)
