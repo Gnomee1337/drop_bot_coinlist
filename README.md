@@ -14,6 +14,12 @@ A bot for registering users (drops) by filling in user data to register on platf
 1. Run `composer install` in `webregpanel/`
 1. Create Admin-User for login to AdminPanel in `webpanel_accouts` DB table
 
+## Database info:
+* `drop_accs` table for registered users
+* `drop_manager` table for bot-managers who are responsible for bringing people to the bot
+* `top_manager` table for users/group-chat notifications, **after user filled data**
+* `webpanel_accounts` table for admin-panel accounts (passwords can be hashed by https://phppasswordhash.com/)
+
 ## Bot functions:
 * RU/ENG Languages
 * User Registration
